@@ -1,0 +1,41 @@
+{
+  "name": "mm-gui-ng2",
+  "version": "1.0.0",
+  "description": "Angular 2 GUI for Money Manager",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"npm run watch\" \"npm run serve\"",
+    "watch": "tsc -w",
+    "serve": "lite-server",
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/v8-suresh/mm-gui-ng2.git"
+  },
+  "keywords": [
+    "ng2",
+    "angular2",
+    "semantic-ui",
+    "webpack"
+  ],
+  "author": "suresh.sivanantham@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/v8-suresh/mm-gui-ng2/issues"
+  },
+  "homepage": "https://github.com/v8-suresh/mm-gui-ng2#readme",
+  "dependencies": {
+    "angular2": "^2.0.0-beta.17",
+    "es6-shim": "^0.35.0",
+    "reflect-metadata": "^0.1.2",
+    "rxjs": "^5.0.0-beta.6",
+    "semantic-ui": "^2.2.4",
+    "systemjs": "^0.19.37",
+    "zone.js": "^0.6.12"
+  },
+  "devDependencies": {
+    "concurrently": "^2.2.0",
+    "lite-server": "^2.2.2"
+  }
+}
