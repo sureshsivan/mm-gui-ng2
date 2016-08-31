@@ -2,6 +2,6 @@ import { Component } from 'angular2/core';
 
 @Component({
     selector: 'app',
-    template: require('./app.html')
+    template: '<h1>Hello, Angular2 - configXX</h1>'
 })
 export class AppComponent { }

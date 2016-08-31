@@ -4,9 +4,11 @@
   "description": "Angular 2 GUI for Money Manager",
   "main": "index.js",
   "scripts": {
+    "build": "npm run build:prod",
     "build:dev": "webpack --progress --colors",
+    "build:prod": "webpack --config webpack.prod.config.js --progress --colors",
     "server:dev": "webpack-dev-server --hot --progress --colors --content-base dist/",
-    "start": "npm run server:dev"
+    "server:prod": "http-server dist/ --cors"
   },
   "repository": {
     "type": "git",
@@ -41,7 +43,8 @@
     "serve-favicon": "^2.3.0",
     "swig": "^1.4.2",
     "typescript": "^1.8.10",
-    "zone.js": "0.6.12"
+    "zone.js": "0.6.12",
+    "http-server": "^0.8.5"
   },
   "devDependencies": {
     "concurrently": "^2.2.0",
