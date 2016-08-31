@@ -4,10 +4,9 @@
   "description": "Angular 2 GUI for Money Manager",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"npm run watch\" \"npm run serve\"",
-    "watch": "tsc -w",
-    "serve": "lite-server",
-    "test": "echo \"Error: no test specified\" && exit 0"
+    "build:dev": "webpack --progress --colors",
+    "server:dev": "webpack-dev-server --hot --progress --colors --content-base dist/",
+    "start": "npm run server:dev"
   },
   "repository": {
     "type": "git",
@@ -27,14 +26,32 @@
   "homepage": "https://github.com/v8-suresh/mm-gui-ng2#readme",
   "dependencies": {
     "angular2": "2.0.0-beta.17",
+    "body-parser": "^1.13.3",
+    "compression": "^1.5.2",
+    "cookie-parser": "^1.3.3",
     "es6-shim": "0.35.0",
+    "express": "^4.13.3",
+    "express-jwt": "^3.4.0",
+    "glob": "^6.0.4",
+    "method-override": "^2.3.0",
+    "mongoose": "^4.1.2",
+    "morgan": "^1.6.1",
     "reflect-metadata": "0.1.2",
     "rxjs": "5.0.0-beta.6",
-    "systemjs": "0.19.37",
+    "serve-favicon": "^2.3.0",
+    "swig": "^1.4.2",
+    "typescript": "^1.8.10",
     "zone.js": "0.6.12"
   },
   "devDependencies": {
     "concurrently": "^2.2.0",
-    "lite-server": "^2.2.2"
+    "copy-webpack-plugin": "^3.0.1",
+    "html-webpack-plugin": "^2.22.0",
+    "lite-server": "^2.2.2",
+    "raw-loader": "^0.5.1",
+    "ts-loader": "^0.8.2",
+    "typings": "^1.3.3",
+    "webpack": "^1.13.2",
+    "webpack-dev-server": "^1.15.1"
   }
 }
