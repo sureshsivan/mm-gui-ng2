@@ -42,7 +42,7 @@ module.exports = function(app, config) {
 
   app.use(cookieParser());
   app.use(compress());
-  app.use(express.static(__dirname + '/dist'));
+  app.use(express.static(__dirname + '/dist/'));
   app.use(methodOverride());
 
   app.get('/', function(req, res) {

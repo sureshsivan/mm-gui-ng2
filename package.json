@@ -6,6 +6,7 @@
   "scripts": {
     "postinstall": "webpack --progress --colors",
     "start": "node app.js",
+    "build": "webpack --progress --colors",
     "build:dev": "webpack --progress --colors",
     "watch:dev": "webpack-dev-server --inline --hot --progress --colors --content-base dist/"
   },
