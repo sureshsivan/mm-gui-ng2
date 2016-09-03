@@ -1,9 +1,7 @@
 
 
 var express = require('express'),
-    config = require('./config/config'),
-    glob = require('glob'),
-    path = require('path');
+    config = require('./config/config');
 
 var app = express();
 

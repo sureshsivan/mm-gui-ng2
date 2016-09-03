@@ -19,10 +19,10 @@ var jwtCheck = jwt({
 
 
 module.exports = function(app, config) {
-  var env = process.env.NODE_ENV || 'development';
+  var env = process.env.ENV || 'development';
   app.locals.ENV = env;
   app.locals.ENV_DEVELOPMENT = env == 'development';
-  
+
   app.engine('swig', swig.renderFile);
   if(env == 'development'){
     app.set('view cache', false);
@@ -42,23 +42,15 @@ module.exports = function(app, config) {
 
   app.use(cookieParser());
   app.use(compress());
-  app.use(express.static(__dirname + '/public'));
-  app.use(express.static(__dirname + '/built'));
-  app.use(express.static(__dirname + '/node_modules'));
+  app.use(express.static(__dirname + '/dist'));
   app.use(methodOverride());
 
   app.get('/', function(req, res) {
-    res.sendFile(path.join(__dirname + '/index.html'));
+    res.sendFile(path.join(__dirname + '/dist' + '/index.html'));
   });
   app.get('/index.html', function(req, res) {
-    res.sendFile(path.join(__dirname + '/index.html'));
+    res.sendFile(path.join(__dirname + '/dist' + '/index.html'));
   });
-
-  // app.use(function (req, res, next) {
-  //   var err = new Error('Not Found');
-  //   err.status = 404;
-  //   next(err);
-  // });
   
   if(app.get('env') === 'development'){
     app.use(function (err, req, res, next) {

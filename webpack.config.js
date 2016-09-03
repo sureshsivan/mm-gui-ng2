@@ -2,7 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-var ENV = process.env.ENV = 'development';
+var ENV = process.env.ENV = 'sadfrgvas';
 var HOST = process.env.HOST || 'localhost';
 var PORT = process.env.PORT || 8080;
 
@@ -29,7 +29,7 @@ module.exports = {
     },
 
     // Switch loaders to debug mode
-    debug: true,
+    debug: false,
 
     // Our angular app
     entry: {
@@ -46,30 +46,27 @@ module.exports = {
 
     resolve: {
         // Add `.ts` and `.tsx` as a resolvable extension.
-        extensions: ['', '.ts', '.tsx', '.js']
+        extensions: ['', '.js', '.ts', '.tsx', 'es6']
     },
 
     module: {
-        loaders: [
-            // Support for .ts files
-            {
+        loaders: [{
                 test: /\.tsx?$/,
                 loader: 'ts-loader',
                 include: [ path.resolve(__dirname, "./src") ]
-            },
-            // Support for .html as raw text
-            {
+            }, {
                 test: /\.html$/,
                 loader: 'raw-loader',
                 exclude: [ path.resolve(__dirname, "src/index.html") ]
-            }
-        ]
+            }]
     },
 
     plugins: [
         // Copy static assets to the build folder
         new CopyWebpackPlugin([{ from: 'src/assets', to: 'assets' }]),
         // Generate the index.html
-        new HtmlWebpackPlugin({ template: 'src/index.html' })
+        new HtmlWebpackPlugin({ template: 'src/index.html' }),
+        //  Minification support
+        // new webpack.optimize.UglifyJsPlugin()
     ]
 }
