@@ -5,7 +5,11 @@
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "module": "commonjs",
-        "noImplicitAny": false,
+        "noImplicitAny": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "moduleResolution": "node",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
         "outDir": "built",
         "rootDir": "."
     },
