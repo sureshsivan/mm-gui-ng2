@@ -1,17 +1,18 @@
 {
     "compilerOptions": {
-        "target": "es5",
-        "sourceMap": true,
-        "experimentalDecorators": true,
+        "declaration": false,
         "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "lib": ["es6", "dom"],
+        "mapRoot": "./",
         "module": "commonjs",
-        "noImplicitAny": true,
-        "suppressImplicitAnyIndexErrors": true,
         "moduleResolution": "node",
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "outDir": "built",
-        "rootDir": "."
+        "outDir": "../dist/out-tsc",
+        "sourceMap": true,
+        "target": "es5",
+        "typeRoots": [
+            "../node_modules/@types"
+        ]
     },
     "exclude": [
         "node_modules",
@@ -19,12 +20,5 @@
         "typings/main",
         "typings/browser.d.ts",
         "typings/browser"
-    ],
-    "filesGlob": [
-        "./src/**/*.ts",
-        "!./node_modules/**/*.ts",
-        "typings/browser.d.ts"
-    ],
-    "compileOnSave": false,
-    "buildOnSave": false
+    ]
 }

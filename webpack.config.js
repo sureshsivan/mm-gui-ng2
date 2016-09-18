@@ -62,6 +62,13 @@ module.exports = {
     },
 
     plugins: [
+        // expose jquery
+        new webpack.ProvidePlugin({
+            $: "jquery/dist/jquery.js",
+            jQuery: "jquery/dist/jquery.js",
+            "window.jQuery": "jquery/dist/jquery.js",
+            "window.$": "jquery/dist/jquery.js"
+        }),
         // Copy static assets to the build folder
         new CopyWebpackPlugin([{ from: 'src/assets', to: 'assets' }]),
         // Generate the index.html

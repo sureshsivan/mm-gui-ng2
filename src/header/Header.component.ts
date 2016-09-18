@@ -33,4 +33,4 @@ import { Component, Input, Output, EventEmitter} from '@angular/core'
       </div>`
 })
 
-export class HeaderImpl{ }
+export class HeaderComponent{ }
