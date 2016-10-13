@@ -6,6 +6,9 @@ node_js:
 #services:
 #  - docker
 
+script:
+  npm run build
+
 deploy:
   - provider: s3
     access_key_id: $AWS_S3_ACCESS_KEY
