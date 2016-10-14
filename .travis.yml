@@ -3,6 +3,12 @@ language: node_js
 node_js:
   - "5.11"
 
+before_deploy:
+  pip install --user awscli
+
+#http://stackoverflow.com/questions/37267916/how-to-run-aws-configure-in-a-travis-deploy-script
+#http://stackoverflow.com/questions/18456611/is-it-possible-to-set-up-travis-to-run-tests-for-several-languages
+
 #services:
 #  - docker
 
@@ -10,6 +16,9 @@ script:
   npm run build
 
 deploy:
+#  - provider: script
+#    script: ~/.local/bin/aws s3 sync dist s3://example.com --region=eu-central-1 --delete
+#      skip_cleanup: true
   - provider: s3
     access_key_id: $AWS_S3_ACCESS_KEY
     secret_access_key: $AWS_S3_SECRET_KEY
