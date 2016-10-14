@@ -1,16 +1,17 @@
 var webpack = require('webpack');
 var webpackMerge = require('webpack-merge');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 var commonConfig = require('./webpack.common.js');
 var helpers = require('./helpers');
-
+const BUILD_FOLDER_NAME = 'dist';
 const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
 
 module.exports = webpackMerge(commonConfig, {
     devtool: 'source-map',
 
     output: {
-        path: helpers.root('dist'),
+        path: helpers.root(BUILD_FOLDER_NAME),
         publicPath: '/',
         filename: '[name].[hash].js',
         chunkFilename: '[id].[hash].chunk.js'
@@ -33,6 +34,13 @@ module.exports = webpackMerge(commonConfig, {
             'process.env': {
                 'ENV': JSON.stringify(ENV)
             }
-        })
+        }),
+        new CopyWebpackPlugin([{
+            from: 'public/favicon.ico',
+            to: helpers.root(BUILD_FOLDER_NAME)
+        }, {
+            from: 'public/site-error.html',
+            to: helpers.root(BUILD_FOLDER_NAME)
+        }])
     ]
 });
