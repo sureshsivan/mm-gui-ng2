@@ -3,8 +3,6 @@ language: node_js
 node_js:
   - "5.11"
 
-before_deploy:
-  pip install --user awscli
 
 #http://stackoverflow.com/questions/37267916/how-to-run-aws-configure-in-a-travis-deploy-script
 #http://stackoverflow.com/questions/18456611/is-it-possible-to-set-up-travis-to-run-tests-for-several-languages
@@ -15,11 +13,15 @@ before_deploy:
 script:
   npm run build
 
-deploy:
+after_success:
+  pip install --user awscli
+
+before_deploy:
   - provider: script
     script: ~/.local/bin/aws s3 rm s3://mm-ng2-gui --recursive
     skip_cleanup: true
-    
+
+deploy:
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY_ID
     secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -28,6 +30,13 @@ deploy:
     local_dir: dist
     acl: public_read
     cache_control: "max-age=21600"
+
+
+#after_deploy:
+#    cloudfront distribution
+    
+#after_script:
+#    publish to docker public repo
 
 # after deploying into s3 - build and publish docker image
 #after_deploy:
