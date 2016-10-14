@@ -13,15 +13,13 @@ node_js:
 script:
   npm run build
 
-after_success:
-  pip install --user awscli
-
 before_deploy:
+    pip install --user awscli
+
+deploy:
   - provider: script
     script: ~/.local/bin/aws s3 rm s3://mm-ng2-gui --recursive
     skip_cleanup: true
-
-deploy:
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY_ID
     secret_access_key: $AWS_SECRET_ACCESS_KEY
