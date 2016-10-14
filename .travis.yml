@@ -17,7 +17,7 @@ script:
 
 before_deploy:
   - provider: script
-    script: ~/.local/bin/aws s3 sync dist s3://mm-ng2-gui --region=us-east-1 --delete
+    script: ~/.local/bin/aws s3 rm s3://mm-ng2-gui --recursive
     skip_cleanup: true
       
 deploy:
