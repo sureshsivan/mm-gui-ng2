@@ -3,10 +3,6 @@ language: node_js
 node_js:
   - "5.11"
 
-
-#http://stackoverflow.com/questions/37267916/how-to-run-aws-configure-in-a-travis-deploy-script
-#http://stackoverflow.com/questions/18456611/is-it-possible-to-set-up-travis-to-run-tests-for-several-languages
-
 #services:
 #  - docker
 
