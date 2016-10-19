@@ -12,18 +12,18 @@ script:
 before_deploy:
    pip install --user awscli
 
-deploy:
-  - provider: script
-    script: ~/.local/bin/aws s3 rm s3://mm.sivashub.com --recursive
-    skip_cleanup: true
-  - provider: s3
-    access_key_id: $AWS_ACCESS_KEY_ID
-    secret_access_key: $AWS_SECRET_ACCESS_KEY
-    bucket: "mm.sivashub.com"
-    skip_cleanup: true
-    local_dir: dist
-    acl: public_read
-    cache_control: "max-age=21600"
+#deploy:
+#  - provider: script
+#    script: ~/.local/bin/aws s3 rm s3://mm.sivashub.com --recursive
+#    skip_cleanup: true
+#  - provider: s3
+#    access_key_id: $AWS_ACCESS_KEY_ID
+#    secret_access_key: $AWS_SECRET_ACCESS_KEY
+#    bucket: "mm.sivashub.com"
+#    skip_cleanup: true
+#    local_dir: dist
+#    acl: public_read
+#    cache_control: "max-age=21600"
 
 
 #after_deploy:
