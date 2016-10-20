@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 STACK_NAME=MM-NG2-WEB-STACK
-DOMAIN_NAME="Z1SDAQ7OTDOJDU"
+DOMAIN_NAME="sivashub.com"
 SUBDOMAIN_PREFIX="mm.ng2"
+REGION_HOSTED_ZONE_ID="Z3AQBSTGFYJSTF"
+DOMAIN_HOSTED_ZONE_ID="Z1SDAQ7OTDOJDU"
 # check for stack existance
 # TODO : Check based on all status codes
 #CREATE NEW STACK IF [CREATE_FAILED, DELETE_COMPLETE]
@@ -37,6 +39,8 @@ if [ -z "$STACK_ALIVE" ]; then
             --parameters \
                 ParameterKey=PRoute53HostedZone,ParameterValue=$DOMAIN_NAME   \
                 ParameterKey=PRoute53SubDomainPrefix,ParameterValue=$SUBDOMAIN_PREFIX   \
+                ParameterKey=PRoute53RegionHostedZoneId,ParameterValue=$REGION_HOSTED_ZONE_ID   \
+                ParameterKey=PRoute53DomainHostedZoneId,ParameterValue=$DOMAIN_HOSTED_ZONE_ID   \
             --region $AWS_REGION
     echo "[INFO] STACK CREATION : Kicked Off"
 else
@@ -48,6 +52,8 @@ else
             --parameters \
                 ParameterKey=PRoute53HostedZone,ParameterValue=$DOMAIN_NAME   \
                 ParameterKey=PRoute53SubDomainPrefix,ParameterValue=$SUBDOMAIN_PREFIX   \
+                ParameterKey=PRoute53RegionHostedZoneId,ParameterValue=$REGION_HOSTED_ZONE_ID   \
+                ParameterKey=PRoute53DomainHostedZoneId,ParameterValue=$DOMAIN_HOSTED_ZONE_ID   \
             --region $AWS_REGION
     echo "[INFO] STACK UPDATE : Kicked Off"
 fi

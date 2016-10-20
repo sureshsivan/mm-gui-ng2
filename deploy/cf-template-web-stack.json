@@ -7,6 +7,16 @@
       "Description": "The hosted Zone Address to use for Route 53 deployment",
       "Default": "sivashub.com"
     },
+    "PRoute53RegionHostedZoneId": {
+      "Type": "String",
+      "Description": "The hosted Zone Canonical ID of us-east region",
+      "Default": "Z3AQBSTGFYJSTF"
+    },
+    "PRoute53DomainHostedZoneId": {
+      "Type": "String",
+      "Description": "The hosted Zone Canonical ID of the target hosted Zone",
+      "Default": "Z3AQBSTGFYJSTF"
+    },
     "PRoute53SubDomainPrefix": {
       "Type": "String",
       "Description": "SubDomain to use when creatring A Record for DNS mapping to website",
@@ -14,99 +24,131 @@
     }
   },
   "Resources": {
-    "RS3NakedSubDomainBucket":{
+    "RS3NakedSubDomainBucket": {
       "Type": "AWS::S3::Bucket",
       "Properties": {
         "BucketName": {
-          "Fn::Join": ["", [
-            {"Ref": "PRoute53SubDomainPrefix"},
-            ".",
-            {"Ref": "PRoute53HostedZone"}
-          ]]
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "PRoute53SubDomainPrefix"
+              },
+              ".",
+              {
+                "Ref": "PRoute53HostedZone"
+              }
+            ]
+          ]
         },
         "AccessControl": "PublicRead",
-        "WebsiteConfiguration":{
+        "WebsiteConfiguration": {
           "IndexDocument": "index.html",
           "ErrorDocument": "site-error.html"
         }
       }
     },
-    "RS3WWWSubDomainBucket":{
+    "RS3WWWSubDomainBucket": {
       "Type": "AWS::S3::Bucket",
       "DependsOn": [
         "RS3NakedSubDomainBucket"
       ],
       "Properties": {
         "BucketName": {
-          "Fn::Join": ["", [
-            "www",
-            ".",
-            {"Ref": "PRoute53SubDomainPrefix"},
-            ".",
-            {"Ref": "PRoute53HostedZone"}
-          ]]
+          "Fn::Join": [
+            "",
+            [
+              "www",
+              ".",
+              {
+                "Ref": "PRoute53SubDomainPrefix"
+              },
+              ".",
+              {
+                "Ref": "PRoute53HostedZone"
+              }
+            ]
+          ]
         },
         "AccessControl": "PublicRead",
-        "WebsiteConfiguration":{
+        "WebsiteConfiguration": {
           "RedirectAllRequestsTo": {
             "HostName": {
-              "Fn::Join": ["", [
-                {"Ref": "PRoute53SubDomainPrefix"},
-                ".",
-                {"Ref": "PRoute53HostedZone"}
-              ]]
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Ref": "PRoute53SubDomainPrefix"
+                  },
+                  ".",
+                  {
+                    "Ref": "PRoute53HostedZone"
+                  }
+                ]
+              ]
             }
           }
         }
       }
     },
-    "RRoute53NakedSubDomainARecord":{
-      "Type": "AWS::Route53::RecordSet",
+    "RRoute53NakedSubDomainARecordGroup": {
+      "Type": "AWS::Route53::RecordSetGroup",
       "DependsOn": [
         "RS3NakedSubDomainBucket",
         "RS3WWWSubDomainBucket"
       ],
       "Properties": {
-        "HostedZoneId" : {
-          "Ref" : "PRoute53HostedZone"
+        "HostedZoneId": {
+          "Ref": "PRoute53DomainHostedZoneId"
         },
-        "Name" : {
-          "Fn::Join": ["", [
-            {"Ref": "PRoute53SubDomainPrefix"},
-            ".",
-            {"Ref": "PRoute53HostedZone"}
-          ]]
-        },
-        "Type" : "A",
-        "TTL" : "900",
-        "ResourceRecords" : [
-          { "Fn::GetAtt" : [ "RS3NakedSubDomainBucket", "WebsiteURL" ] }
-        ]
-      }
-    },
-    "RRoute53WWWSubDomainARecord":{
-      "Type": "AWS::Route53::RecordSet",
-      "DependsOn": [
-        "RS3NakedSubDomainBucket",
-        "RS3WWWSubDomainBucket"
-      ],
-      "Properties": {
-        "HostedZoneId" : {
-          "Ref" : "PRoute53HostedZone"
-        },
-        "Name" : {
-          "Fn::Join": ["", [
-            "www",
-            ".",
-            {"Ref": "PRoute53SubDomainPrefix"},
-            ".",
-            {"Ref": "PRoute53HostedZone"}
-          ]]
-        },
-        "Type" : "A",
-        "TTL" : "900",
-        "ResourceRecords" : [
-          { "Fn::GetAtt" : [ "RS3WWWSubDomainBucket", "WebsiteURL" ] }
+        "RecordSets": [
+          {
+            "Name": {
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Ref": "PRoute53SubDomainPrefix"
+                  },
+                  ".",
+                  {
+                    "Ref": "PRoute53HostedZone"
+                  }
+                ]
+              ]
+            },
+            "Type": "A",
+            "AliasTarget": {
+              "DNSName": "s3-website-us-east-1.amazonaws.com",
+              "HostedZoneId": {
+                "Ref": "PRoute53RegionHostedZoneId"
+              }
+            }
+          },
+          {
+            "Name": {
+              "Fn::Join": [
+                "",
+                [
+                  "www.",
+                  {
+                    "Ref": "PRoute53SubDomainPrefix"
+                  },
+                  ".",
+                  {
+                    "Ref": "PRoute53HostedZone"
+                  }
+                ]
+              ]
+            },
+            "Type": "A",
+            "AliasTarget": {
+              "DNSName": "s3-website-us-east-1.amazonaws.com",
+              "HostedZoneId": {
+                "Ref": "PRoute53RegionHostedZoneId"
+              }
+            }
+          }
         ]
       }
     }
