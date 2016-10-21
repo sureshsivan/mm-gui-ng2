@@ -28,8 +28,7 @@ DOMAIN_HOSTED_ZONE_ID="Z1SDAQ7OTDOJDU"
 #  X UPDATE_ROLLBACK_COMPLETE_CLEANUP_IN_PROGRESS
 #  X UPDATE_ROLLBACK_COMPLETE
 STACK_ALIVE="$("$AWS_CLI" cloudformation list-stacks --stack-status-filter CREATE_COMPLETE UPDATE_COMPLETE | grep "$STACK_NAME")"
-echo $DOMAIN_NAME
-echo $SUBDOMAIN_PREFIX
+
 if [ -z "$STACK_ALIVE" ]; then
     echo "[INFO] ${MM-NG2-WEB-STACK} Stack was never created or dead - recreating the complete stack : CREATING NEW STACK" >& 2
     $AWS_CLI cloudformation create-stack \

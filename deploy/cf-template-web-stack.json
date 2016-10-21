@@ -92,11 +92,14 @@
       }
     },
     "RCloudFront":{
-      "Type": "",
+      "Type" : "AWS::CloudFront::Distribution",
       "DependsOn": [
         "RS3NakedSubDomainBucket",
         "RS3WWWSubDomainBucket"
-      ]
+      ],
+      "Properties": {
+
+      }
     },
     "RRoute53NakedSubDomainARecordGroup": {
       "Type": "AWS::Route53::RecordSetGroup",
