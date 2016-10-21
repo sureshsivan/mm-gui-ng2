@@ -91,6 +91,13 @@
         }
       }
     },
+    "RCloudFront":{
+      "Type": "",
+      "DependsOn": [
+        "RS3NakedSubDomainBucket",
+        "RS3WWWSubDomainBucket"
+      ]
+    },
     "RRoute53NakedSubDomainARecordGroup": {
       "Type": "AWS::Route53::RecordSetGroup",
       "DependsOn": [
@@ -148,23 +155,68 @@
                 "Ref": "PRoute53RegionHostedZoneId"
               }
             }
+          },
+          {
+            "Name": {
+              "Fn::Join": [
+                "",
+                [
+                  "cdn.",
+                  {
+                    "Ref": "PRoute53SubDomainPrefix"
+                  },
+                  ".",
+                  {
+                    "Ref": "PRoute53HostedZone"
+                  }
+                ]
+              ]
+            },
+            "Type": "CNAME",
+            "TTL": "120",
+            "ResourceRecords": [{"Fn::GetAtt": ["RCloudFront", "DomainName" ]}]
+          },
+          {
+            "Name": {
+              "Fn::Join": [
+                "",
+                [
+                  "www.cdn.",
+                  {
+                    "Ref": "PRoute53SubDomainPrefix"
+                  },
+                  ".",
+                  {
+                    "Ref": "PRoute53HostedZone"
+                  }
+                ]
+              ]
+            },
+            "Type": "CNAME",
+            "TTL": "120",
+            "ResourceRecords": [{"Fn::GetAtt": ["RCloudFront", "DomainName" ]}]
           }
         ]
       }
     }
   },
   "Outputs": {
-    "S3NakedSubDomainUrl":{
+    "S3WebsiteNakedSubDomainUrl":{
       "Value": {
         "Fn::GetAtt" : [ "RS3NakedSubDomainBucket", "WebsiteURL" ]
       }
     },
-    "S3WWWSubDomainUrl":{
+    "S3WebsiteWWWSubDomainUrl":{
       "Value": {
         "Fn::GetAtt" : [ "RS3WWWSubDomainBucket", "WebsiteURL" ]
       }
     },
-    "Route52NakedSubDomainUrl":{
+    "CloudFrontUrl":{
+      "Value": {
+        "Fn::GetAtt": ["RCloudFront", "DomainName"]
+      }
+    },
+    "PrivateDNSNakedSubDomainUrl":{
       "Value": {
         "Fn::Join": ["", [
           {"Ref": "PRoute53SubDomainPrefix"},
@@ -173,7 +225,7 @@
         ]]
       }
     },
-    "Route52WWWSubDomainUrl":{
+    "PrivateDNSWWWSubDomainUrl":{
       "Value": {
         "Fn::Join": ["", [
           "www",
@@ -182,6 +234,40 @@
           ".",
           {"Ref": "PRoute53HostedZone"}
         ]]
+      }
+    },
+    "PrivateDNSCloudfrontNakedSubDomainUrl":{
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "cdn.",
+            {
+              "Ref": "PRoute53SubDomainPrefix"
+            },
+            ".",
+            {
+              "Ref": "PRoute53HostedZone"
+            }
+          ]
+        ]
+      }
+    },
+    "PrivateDNSCloudfrontWWWSubDomainUrl":{
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "www.cdn.",
+            {
+              "Ref": "PRoute53SubDomainPrefix"
+            },
+            ".",
+            {
+              "Ref": "PRoute53HostedZone"
+            }
+          ]
+        ]
       }
     }
   }
