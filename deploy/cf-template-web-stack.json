@@ -98,7 +98,7 @@
     "ResourceRoute53Recordset": {
       "Type" : "AWS::Route53::RecordSetGroup",
       "Properties" : {
-        "HostedZoneName" : { "Fn::Join" : [ "", [{ "Ref" : "ParamAppDomain" }, "."]]},
+        "HostedZoneName" : { "Fn::Join" : [ "", [{ "Ref" : "ParamRootDomain" }, "."]]},
         "RecordSets" : [
           {
             "Name" : { "Ref" : "ParamAppDomain" },
