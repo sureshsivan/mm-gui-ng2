@@ -46,6 +46,7 @@
     },
     "ResourceWWWRedirectS3Bucket":{
       "Type": "AWS::S3::Bucket",
+      "DependsOn": ["ResourceWebsiteS3Bucket"],
       "Properties": {
         "BucketName": {
           "Fn::Join": [".", ["www", {"Ref":"ParamAppDomain"}]]
@@ -60,6 +61,7 @@
     },
     "ResourceCloudFrontDistribution": {
       "Type" : "AWS::CloudFront::Distribution",
+      "DependsOn": ["ResourceWWWRedirectS3Bucket"],
       "Properties" : {
         "DistributionConfig" : {
           "Comment" : "Cloudfront Distribution pointing to S3 bucket",
@@ -96,6 +98,7 @@
     },
     "ResourceRoute53Recordset": {
       "Type" : "AWS::Route53::RecordSetGroup",
+      "DependsOn": ["ResourceCloudFrontDistribution"],
       "Properties" : {
         "HostedZoneName" : { "Fn::Join" : [ "", [{ "Ref" : "ParamRootDomain" }, "."]]},
         "RecordSets" : [
