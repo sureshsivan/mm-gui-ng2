@@ -2,275 +2,152 @@
   "AWSTemplateFormatVersion": "2010-09-09",
   "Description": "MM - Web Infrastructure",
   "Parameters": {
-    "PRoute53HostedZone": {
+    "ParamRootDomain": {
       "Type": "String",
-      "Description": "The hosted Zone Address to use for Route 53 deployment",
+      "Description": "Root Domain under which application domain should be crated",
+      "AllowedPattern" : "(?!-)[a-zA-Z0-9-.]{1,63}(?<!-)",
+      "ConstraintDescription" : "must be a valid DNS zone name.",
       "Default": "sivashub.com"
     },
-    "PRoute53RegionHostedZoneId": {
+    "ParamAppDomain": {
       "Type": "String",
-      "Description": "The hosted Zone Canonical ID of us-east region",
-      "Default": "Z3AQBSTGFYJSTF"
+      "Description": "The actual Domain name to use for the application",
+      "AllowedPattern" : "(?!-)[a-zA-Z0-9-.]{1,63}(?<!-)",
+      "ConstraintDescription" : "must be a valid DNS zone name.",
+      "Default": "mm.ng2.sivashub.com"
+    }
+  },
+  "Mappings" : {
+    "RegionMap" : {
+      "us-east-1" : { "S3hostedzoneID" : "Z3AQBSTGFYJSTF", "websiteendpoint" : "s3-website-us-east-1.amazonaws.com" },
+      "us-west-1" : { "S3hostedzoneID" : "Z2F56UZL2M1ACD", "websiteendpoint" : "s3-website-us-west-1.amazonaws.com" },
+      "us-west-2" : { "S3hostedzoneID" : "Z3BJ6K6RIION7M", "websiteendpoint" : "s3-website-us-west-2.amazonaws.com" },
+      "eu-west-1" : { "S3hostedzoneID" : "Z1BKCTXD74EZPE", "websiteendpoint" : "s3-website-eu-west-1.amazonaws.com" },
+      "ap-southeast-1" : { "S3hostedzoneID" : "Z3O0J2DXBE1FTB", "websiteendpoint" : "s3-website-ap-southeast-1.amazonaws.com" },
+      "ap-southeast-2" : { "S3hostedzoneID" : "Z1WCIGYICN2BYD", "websiteendpoint" : "s3-website-ap-southeast-2.amazonaws.com" },
+      "ap-northeast-1" : { "S3hostedzoneID" : "Z2M4EHUR26P7ZW", "websiteendpoint" : "s3-website-ap-northeast-1.amazonaws.com" },
+      "sa-east-1" : { "S3hostedzoneID" : "Z31GFT0UA1I2HV", "websiteendpoint" : "s3-website-sa-east-1.amazonaws.com" }
     },
-    "PRoute53DomainHostedZoneId": {
-      "Type": "String",
-      "Description": "The hosted Zone Canonical ID of the target hosted Zone",
-      "Default": "Z3AQBSTGFYJSTF"
-    },
-    "PRoute53SubDomainPrefix": {
-      "Type": "String",
-      "Description": "SubDomain to use when creatring A Record for DNS mapping to website",
-      "Default": "mm.ng2"
+    "HostedZones" : {
+      "CloudFront": {"ZoneId" : "Z2FDTNDATAQYW2"}
     }
   },
   "Resources": {
-    "RS3NakedSubDomainBucket": {
-      "Type": "AWS::S3::Bucket",
-      "Properties": {
-        "BucketName": {
-          "Fn::Join": [
-            "",
-            [
-              {
-                "Ref": "PRoute53SubDomainPrefix"
-              },
-              ".",
-              {
-                "Ref": "PRoute53HostedZone"
-              }
-            ]
-          ]
-        },
-        "AccessControl": "PublicRead",
-        "WebsiteConfiguration": {
-          "IndexDocument": "index.html",
-          "ErrorDocument": "site-error.html"
+    "ResourceWebsiteS3Bucket":{
+      "Type" : "AWS::S3::Bucket",
+      "Properties" : {
+        "BucketName": { "Ref" : "ParamAppDomain" },
+        "AccessControl" : "PublicRead",
+        "WebsiteConfiguration" : {
+          "IndexDocument" : "index.html",
+          "ErrorDocument" : "site-error.html"
         }
-      }
+      },
+      "DeletionPolicy" : "Retain"
     },
-    "RS3WWWSubDomainBucket": {
+    "ResourceWWWRedirectS3Bucket":{
       "Type": "AWS::S3::Bucket",
-      "DependsOn": [
-        "RS3NakedSubDomainBucket"
-      ],
       "Properties": {
         "BucketName": {
-          "Fn::Join": [
-            "",
-            [
-              "www",
-              ".",
-              {
-                "Ref": "PRoute53SubDomainPrefix"
-              },
-              ".",
-              {
-                "Ref": "PRoute53HostedZone"
-              }
-            ]
-          ]
+          "Fn::Join": [".", ["www", {"Ref":"ParamAppDomain"}]]
         },
-        "AccessControl": "PublicRead",
+        "AccessControl": "BucketOwnerFullControl",
         "WebsiteConfiguration": {
           "RedirectAllRequestsTo": {
-            "HostName": {
-              "Fn::Join": [
-                "",
-                [
-                  {
-                    "Ref": "PRoute53SubDomainPrefix"
-                  },
-                  ".",
-                  {
-                    "Ref": "PRoute53HostedZone"
-                  }
-                ]
-              ]
-            }
+            "HostName": {"Ref": "ParamAppDomain"}
           }
         }
       }
     },
-    "RCloudFront":{
+    "ResourceCloudFrontDistribution": {
       "Type" : "AWS::CloudFront::Distribution",
-      "DependsOn": [
-        "RS3NakedSubDomainBucket",
-        "RS3WWWSubDomainBucket"
-      ],
-      "Properties": {
-
+      "Properties" : {
+        "DistributionConfig" : {
+          "Comment" : "Cloudfront Distribution pointing to S3 bucket",
+          "Origins" : [ {
+            "DomainName": {
+              "Fn::Join" : [".", [
+                {"Ref" : "ParamAppDomain"},
+                {"Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "websiteendpoint"]}
+              ]]
+            },
+            "Id" : {"Fn::Join": ["-", ["custom", "cloudfront", "dist", "origin", "id", {"Ref":"ParamAppDomain"}]]},
+            "CustomOriginConfig": {
+              "HTTPPort": "80",
+              "HTTPSPort": "443",
+              "OriginProtocolPolicy": "http-only"
+            }
+          }],
+          "Enabled" : "true",
+          "DefaultRootObject" : "index.html",
+          "Aliases" : [
+            { "Ref": "ParamAppDomain" }
+          ],
+          "DefaultCacheBehavior" : {
+            "AllowedMethods" : [ "GET", "HEAD" ],
+            "Compress": "true",
+            "TargetOriginId" : {"Fn::Join": ["-", ["custom", "cloudfront", "dist", "origin", "id", {"Ref":"ParamAppDomain"}]]},
+            "ForwardedValues" : {
+              "QueryString" : "true"
+            },
+            "ViewerProtocolPolicy" : "allow-all"
+          }
+        }
       }
     },
-    "RRoute53NakedSubDomainARecordGroup": {
-      "Type": "AWS::Route53::RecordSetGroup",
-      "DependsOn": [
-        "RS3NakedSubDomainBucket",
-        "RS3WWWSubDomainBucket"
-      ],
-      "Properties": {
-        "HostedZoneId": {
-          "Ref": "PRoute53DomainHostedZoneId"
-        },
-        "RecordSets": [
+    "ResourceRoute53Recordset": {
+      "Type" : "AWS::Route53::RecordSetGroup",
+      "Properties" : {
+        "HostedZoneName" : { "Fn::Join" : [ "", [{ "Ref" : "ParamAppDomain" }, "."]]},
+        "RecordSets" : [
           {
-            "Name": {
-              "Fn::Join": [
-                "",
-                [
-                  {
-                    "Ref": "PRoute53SubDomainPrefix"
-                  },
-                  ".",
-                  {
-                    "Ref": "PRoute53HostedZone"
-                  }
-                ]
-              ]
-            },
-            "Type": "A",
-            "AliasTarget": {
-              "DNSName": "s3-website-us-east-1.amazonaws.com",
-              "HostedZoneId": {
-                "Ref": "PRoute53RegionHostedZoneId"
-              }
+            "Name" : { "Ref" : "ParamAppDomain" },
+            "Type" : "A",
+            "AliasTarget" : {
+              "HostedZoneId": {"Fn::FindInMap" : [ "HostedZones", "CloudFront", "ZoneId"]},
+              "DNSName": {"Fn::GetAtt" : [ "ResourceCloudFrontDistribution", "DomainName"] }
             }
           },
           {
             "Name": {
-              "Fn::Join": [
-                "",
-                [
-                  "www.",
-                  {
-                    "Ref": "PRoute53SubDomainPrefix"
-                  },
-                  ".",
-                  {
-                    "Ref": "PRoute53HostedZone"
-                  }
-                ]
-              ]
+              "Fn::Join": ["", ["www.", {"Ref":"ParamAppDomain"}]]
             },
-            "Type": "A",
-            "AliasTarget": {
-              "DNSName": "s3-website-us-east-1.amazonaws.com",
-              "HostedZoneId": {
-                "Ref": "PRoute53RegionHostedZoneId"
+            "Type": "CNAME",
+            "TTL" : "900",
+            "ResourceRecords" : [
+              { "Fn::Join" : [".", [
+                "www", {"Ref" : "ParamAppDomain"},
+                {"Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "websiteendpoint"]}
+              ]]
               }
-            }
-          },
-          {
-            "Name": {
-              "Fn::Join": [
-                "",
-                [
-                  "cdn.",
-                  {
-                    "Ref": "PRoute53SubDomainPrefix"
-                  },
-                  ".",
-                  {
-                    "Ref": "PRoute53HostedZone"
-                  }
-                ]
-              ]
-            },
-            "Type": "CNAME",
-            "TTL": "120",
-            "ResourceRecords": [{"Fn::GetAtt": ["RCloudFront", "DomainName" ]}]
-          },
-          {
-            "Name": {
-              "Fn::Join": [
-                "",
-                [
-                  "www.cdn.",
-                  {
-                    "Ref": "PRoute53SubDomainPrefix"
-                  },
-                  ".",
-                  {
-                    "Ref": "PRoute53HostedZone"
-                  }
-                ]
-              ]
-            },
-            "Type": "CNAME",
-            "TTL": "120",
-            "ResourceRecords": [{"Fn::GetAtt": ["RCloudFront", "DomainName" ]}]
+            ]
           }
         ]
       }
     }
   },
   "Outputs": {
-    "S3WebsiteNakedSubDomainUrl":{
+    "S3WebsiteEndpointUrl":{
       "Value": {
-        "Fn::GetAtt" : [ "RS3NakedSubDomainBucket", "WebsiteURL" ]
+        "Fn::GetAtt" : [ "ResourceWebsiteS3Bucket", "WebsiteURL" ]
       }
     },
-    "S3WebsiteWWWSubDomainUrl":{
+    "S3WebsiteWWWRedirectEndpointUrl":{
       "Value": {
-        "Fn::GetAtt" : [ "RS3WWWSubDomainBucket", "WebsiteURL" ]
+        "Fn::GetAtt" : [ "ResourceWWWRedirectS3Bucket", "WebsiteURL" ]
       }
     },
     "CloudFrontUrl":{
       "Value": {
-        "Fn::GetAtt": ["RCloudFront", "DomainName"]
+        "Fn::GetAtt": ["ResourceCloudFrontDistribution", "DomainName"]
       }
     },
-    "PrivateDNSNakedSubDomainUrl":{
-      "Value": {
-        "Fn::Join": ["", [
-          {"Ref": "PRoute53SubDomainPrefix"},
-          ".",
-          {"Ref": "PRoute53HostedZone"}
-        ]]
-      }
+    "AppDomainAddress":{
+      "Value": { "Ref" : "ParamAppDomain" }
     },
-    "PrivateDNSWWWSubDomainUrl":{
+    "AppDomainWWWRedirectAddress":{
       "Value": {
-        "Fn::Join": ["", [
-          "www",
-          ".",
-          {"Ref": "PRoute53SubDomainPrefix"},
-          ".",
-          {"Ref": "PRoute53HostedZone"}
-        ]]
-      }
-    },
-    "PrivateDNSCloudfrontNakedSubDomainUrl":{
-      "Value": {
-        "Fn::Join": [
-          "",
-          [
-            "cdn.",
-            {
-              "Ref": "PRoute53SubDomainPrefix"
-            },
-            ".",
-            {
-              "Ref": "PRoute53HostedZone"
-            }
-          ]
-        ]
-      }
-    },
-    "PrivateDNSCloudfrontWWWSubDomainUrl":{
-      "Value": {
-        "Fn::Join": [
-          "",
-          [
-            "www.cdn.",
-            {
-              "Ref": "PRoute53SubDomainPrefix"
-            },
-            ".",
-            {
-              "Ref": "PRoute53HostedZone"
-            }
-          ]
-        ]
+        "Fn::Join": [".", ["www", {"Ref":"ParamAppDomain"}]]
       }
     }
   }
