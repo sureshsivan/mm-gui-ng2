@@ -21,5 +21,8 @@ var checkEnvConfig = function(){
     if(! process.env.STACK_NAME){
         throw new Error("STACK_NAME env var not set");
     }
+    if(! process.env.AWS_DEFAULT_REGION){
+        throw new Error("AWS_DEFAULT_REGION env var not set");
+    }
 };
 checkEnvConfig();
