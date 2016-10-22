@@ -42,8 +42,7 @@
           "IndexDocument" : "index.html",
           "ErrorDocument" : "site-error.html"
         }
-      },
-      "DeletionPolicy" : "Retain"
+      }
     },
     "ResourceWWWRedirectS3Bucket":{
       "Type": "AWS::S3::Bucket",
