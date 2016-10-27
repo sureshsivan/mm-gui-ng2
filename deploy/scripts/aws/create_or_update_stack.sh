@@ -7,6 +7,8 @@
 # Wait and create a new stacks if [ROLLBACK_IN_PROGRESS, DELETE_IN_PROGRESS]
 # Wait and update stack if [CREATE_IN_PROGRESS, UPDATE_IN_PROGRESS, UPDATE_ROLLBACK_IN_PROGRESS, UPDATE_ROLLBACK_COMPLETE_CLEANUP_IN_PROGRESS]
 
+CF_STACK_JSON="file://./deploy/cf-template-web-stack-no-cdn.json"
+
 #  X CREATE_IN_PROGRESS
 #  X CREATE_FAILED
 #  X CREATE_COMPLETE
@@ -28,7 +30,7 @@ if [ -z "$STACK_ALIVE" ]; then
     echo "[INFO] $STACK_NAME Stack was never created or dead - recreating the complete stack : CREATING NEW STACK" >& 2
     $AWS_CLI cloudformation create-stack \
             --stack-name $STACK_NAME \
-            --template-body file://./deploy/cf-template-web-stack.json \
+            --template-body $CF_STACK_JSON \
             --capabilities CAPABILITY_IAM \
             --parameters \
                 ParameterKey=ParamRootDomain,ParameterValue=$ROOT_DOMAIN_NAME   \
@@ -40,7 +42,7 @@ else
     echo "[INFO] $STACK_NAME Stack was already built and alive : UPDATING EXISTING STACK" >& 2
     $AWS_CLI cloudformation update-stack \
             --stack-name $STACK_NAME \
-            --template-body file://./deploy/cf-template-web-stack.json \
+            --template-body $CF_STACK_JSON \
             --capabilities CAPABILITY_IAM \
             --parameters \
                 ParameterKey=ParamRootDomain,ParameterValue=$ROOT_DOMAIN_NAME   \

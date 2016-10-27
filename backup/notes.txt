@@ -1,0 +1,3 @@
+https://www.pandastrike.com/posts/20160613-ssl-cert-aws-api-gateway-zerossl-letsencrypt
+
+http://www.davekonopka.com/2016/api-gateway-domain.html
