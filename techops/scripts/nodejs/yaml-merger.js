@@ -2,7 +2,6 @@ var JsonRefs = require('json-refs');
 var YAML = require('yaml-js');
 var fs = require('fs');
 var path = require('path');
-var argv = require('yargs');
 
 const OUTPUT_FILE_NAME = "stack-template.yaml";
 const OUTPUT_FOLDER_NAME = process.cwd() + "/.build/";
@@ -10,7 +9,6 @@ const OUTPUT_FOLDER_NAME = process.cwd() + "/.build/";
 var mergeYaml = function(rootYaml){
     var relativeBase = path.dirname(rootYaml);
     var root = YAML.load(fs.readFileSync(rootYaml).toString());
-    console.log(root);
     var options = {
         filter: function(ref){
             return ref.uri.indexOf('#/') !== 0;
@@ -35,5 +33,5 @@ var mergeYaml = function(rootYaml){
         });
 };
 var deployEnv = process.DEPLOY_ENV || "dev";
-var path = "techops/deploy/" + deployEnv + "/" + "stack.yaml";
-mergeYaml(path);
+var stackTemplatePath = "techops/deploy/" + deployEnv + "/" + "stack.yaml";
+mergeYaml(stackTemplatePath);
