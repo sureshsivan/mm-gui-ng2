@@ -61,31 +61,26 @@
     },
     "ResourceRoute53Recordset": {
       "Type" : "AWS::Route53::RecordSetGroup",
-      "DependsOn": ["ResourceCloudFrontDistribution"],
       "Properties" : {
         "HostedZoneName" : { "Fn::Join" : [ "", [{ "Ref" : "ParamRootDomain" }, "."]]},
         "RecordSets" : [
           {
             "Name" : { "Ref" : "ParamAppDomain" },
             "Type" : "A",
-            "AliasTarget" : {
-              "HostedZoneId": {"Fn::FindInMap" : [ "HostedZones", "CloudFront", "ZoneId"]},
-              "DNSName": {"Fn::GetAtt" : [ "ResourceWebsiteS3Bucket", "WebsiteURL" ] }
+            "AliasTarget": {
+              "DNSName": {"Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "websiteendpoint"]},
+              "HostedZoneId": {"Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "S3hostedzoneID"]}
             }
           },
           {
             "Name": {
               "Fn::Join": ["", ["www.", {"Ref":"ParamAppDomain"}]]
             },
-            "Type": "CNAME",
-            "TTL" : "900",
-            "ResourceRecords" : [
-              { "Fn::Join" : [".", [
-                "www", {"Ref" : "ParamAppDomain"},
-                {"Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "websiteendpoint"]}
-              ]]
-              }
-            ]
+            "Type" : "A",
+            "AliasTarget": {
+              "DNSName": {"Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "websiteendpoint"]},
+              "HostedZoneId": {"Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "S3hostedzoneID"]}
+            }
           }
         ]
       }
@@ -103,11 +98,13 @@
       }
     },
     "AppDomainAddress":{
-      "Value": { "Ref" : "ParamAppDomain" }
+      "Value": {
+        "Fn::Join": ["", ["http://", {"Ref":"ParamAppDomain"}]]
+      }
     },
     "AppDomainWWWRedirectAddress":{
       "Value": {
-        "Fn::Join": [".", ["www", {"Ref":"ParamAppDomain"}]]
+        "Fn::Join": ["", ["http://", {"Fn::Join": [".", ["www", {"Ref":"ParamAppDomain"}]]}]]
       }
     }
   }

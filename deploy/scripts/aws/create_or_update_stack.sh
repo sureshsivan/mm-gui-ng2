@@ -36,7 +36,7 @@ if [ -z "$STACK_ALIVE" ]; then
                 ParameterKey=ParamRootDomain,ParameterValue=$ROOT_DOMAIN_NAME   \
                 ParameterKey=ParamAppDomain,ParameterValue=$APP_DOMAIN_NAME
     echo "[INFO] STACK CREATION : Kicked Off : Waiting for Completeion......"
-#    $AWS_CLI cloudformation wait stack-create-complete --stack-name $STACK_NAME
+    $AWS_CLI cloudformation wait stack-create-complete --stack-name $STACK_NAME
     echo "[INFO] STACK CREATION COMPLETED"
 else
     echo "[INFO] $STACK_NAME Stack was already built and alive : UPDATING EXISTING STACK" >& 2
@@ -48,6 +48,6 @@ else
                 ParameterKey=ParamRootDomain,ParameterValue=$ROOT_DOMAIN_NAME   \
                 ParameterKey=ParamAppDomain,ParameterValue=$APP_DOMAIN_NAME
     echo "[INFO] STACK UPDATE : Kicked Off : Waiting for Completeion......"
-#    $AWS_CLI cloudformation wait stack-update-complete --stack-name $STACK_NAME
+    $AWS_CLI cloudformation wait stack-update-complete --stack-name $STACK_NAME
     echo "[INFO] STACK UPDATE COMPLETED"
 fi
