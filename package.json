@@ -4,11 +4,11 @@
   "description": "Angular 2 GUI for Money Manager",
   "main": "index.js",
   "scripts": {
-    "_checkdeployenv": "node deploy/nodejs/validate-deploy-env.js",
-    "_applyperm": "chmod a+x -R ./deploy/scripts/aws/*.sh",
-    "_prepcfstack": "node deploy/nodejs/yaml-merger",
-    "_createorupdatestack": "./deploy/scripts/aws/create_or_update_stack.sh",
-    "_uploadartifacts": "./deploy/scripts/aws/upload_assets_to_s3.sh",
+    "_checkdeployenv": "node techops/scripts/nodejs/validate-deploy-env.js",
+    "_applyperm": "chmod a+x -R ./techops/scripts/awscli/*.sh",
+    "_prepcfstack": "node techops/scripts/nodejs/yaml-merger",
+    "_createorupdatestack": "./techops/scripts/awscli/create_or_update_stack.sh",
+    "_uploadartifacts": "./techops/scripts/awscli/upload_assets_to_s3.sh",
     "start": "webpack-dev-server --inline --progress --port 8080",
     "test": "karma start",
     "build": "rimraf dist && webpack --config config/webpack.prod.js --progress --profile --bail",
@@ -76,6 +76,7 @@
     "webpack": "^1.13.0",
     "webpack-dev-server": "^1.14.1",
     "webpack-merge": "^0.14.0",
-    "yaml-js": "^0.1.4"
+    "yaml-js": "^0.1.4",
+    "yargs": "^6.4.0"
   }
 }

@@ -2,8 +2,9 @@ var JsonRefs = require('json-refs');
 var YAML = require('yaml-js');
 var fs = require('fs');
 var path = require('path');
+var argv = require('yargs');
 
-const OUTPUT_FILE_NAME = "template.yaml";
+const OUTPUT_FILE_NAME = "stack-template.yaml";
 const OUTPUT_FOLDER_NAME = process.cwd() + "/.build/";
 
 var mergeYaml = function(rootYaml){
@@ -24,7 +25,7 @@ var mergeYaml = function(rootYaml){
     };
     JsonRefs.resolveRefs(root, options)
         .then(function (res) {
-            console.log((OUTPUT_FOLDER_NAME + OUTPUT_FILE_NAME));
+            console.log((OUTPUT_FOLDER_NAME + OUTPUT_FILE_NAME), YAML.dump(res.resolved));
             // fs.writeFileSync('./dist/swagger2.json', JSON.stringify(res.resolved, null, 2), 'utf8');
             fs.writeFileSync((OUTPUT_FOLDER_NAME + OUTPUT_FILE_NAME),
                 YAML.dump(res.resolved),
@@ -33,4 +34,6 @@ var mergeYaml = function(rootYaml){
             console.error(err.stack);
         });
 };
-mergeYaml("deploy/scripts/aws-cf/web-no-cdn.yaml");
+var deployEnv = process.DEPLOY_ENV || "dev";
+var path = "techops/deploy/" + deployEnv + "/" + "stack.yaml";
+mergeYaml(path);

@@ -7,7 +7,7 @@
 # Wait and create a new stacks if [ROLLBACK_IN_PROGRESS, DELETE_IN_PROGRESS]
 # Wait and update stack if [CREATE_IN_PROGRESS, UPDATE_IN_PROGRESS, UPDATE_ROLLBACK_IN_PROGRESS, UPDATE_ROLLBACK_COMPLETE_CLEANUP_IN_PROGRESS]
 
-CF_STACK_JSON="file://./deploy/cf-template-web-stack-no-cdn.json"
+CF_STACK_JSON="file://.build.stack-template.yaml"
 
 #  X CREATE_IN_PROGRESS
 #  X CREATE_FAILED

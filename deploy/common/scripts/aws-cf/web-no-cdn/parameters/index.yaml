@@ -1,0 +1,12 @@
+ParamRootDomain:
+  Type: String
+  Description: Root Domain under which application domain should be crated
+  AllowedPattern: "(?!-)[a-zA-Z0-9-.]{1,63}(?<!-)"
+  ConstraintDescription: must be a valid DNS zone name.
+  Default: sivashub.com
+ParamAppDomain:
+  Type: String
+  Description: The actual Domain name to use for the application
+  AllowedPattern: "(?!-)[a-zA-Z0-9-.]{1,63}(?<!-)"
+  ConstraintDescription: must be a valid DNS zone name.
+  Default: mm.ng2.sivashub.com

@@ -39,6 +39,7 @@ jspm_packages
 
 
 .built/
-.build/
+.build/*.*
 dist/
 typings/
+.secret
