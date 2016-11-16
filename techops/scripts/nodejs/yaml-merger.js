@@ -23,7 +23,6 @@ var mergeYaml = function(rootYaml){
     };
     JsonRefs.resolveRefs(root, options)
         .then(function (res) {
-            console.log((OUTPUT_FOLDER_NAME + OUTPUT_FILE_NAME), YAML.dump(res.resolved));
             // fs.writeFileSync('./dist/swagger2.json', JSON.stringify(res.resolved, null, 2), 'utf8');
             fs.writeFileSync((OUTPUT_FOLDER_NAME + OUTPUT_FILE_NAME),
                 YAML.dump(res.resolved),
@@ -32,6 +31,7 @@ var mergeYaml = function(rootYaml){
             console.error(err.stack);
         });
 };
-var deployEnv = process.DEPLOY_ENV || "dev";
+var deployEnv = process.env.DEPLOY_ENV || "dev";
 var stackTemplatePath = "techops/deploy/" + deployEnv + "/" + "stack.yaml";
+console.log(stackTemplatePath);
 mergeYaml(stackTemplatePath);

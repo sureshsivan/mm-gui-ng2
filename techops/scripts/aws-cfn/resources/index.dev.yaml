@@ -3,4 +3,4 @@ ResourceWebsiteS3Bucket:
 ResourceWWWRedirectS3Bucket:
   $ref: s3/www-website-bucket.yaml
 ResourceRoute53Recordset:
-  $ref: route53/app-domain-a-recordset.yaml
+  $ref: route53/recordset.dev.yaml
