@@ -25,6 +25,9 @@ AppDomainWWWRedirectAddress:
           - Ref: ParamAppDomain
 CloudFrontUrl:
   Value:
-    Fn::GetAtt:
-    - ResourceCloudFrontDistribution
-    - DomainName
+    Fn::Join:
+    - ''
+    - - https://
+      - Fn::GetAtt:
+            - ResourceCloudFrontDistribution
+            - DomainName
