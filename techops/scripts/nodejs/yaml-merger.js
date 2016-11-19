@@ -24,6 +24,9 @@ var mergeYaml = function(rootYaml){
     JsonRefs.resolveRefs(root, options)
         .then(function (res) {
             // fs.writeFileSync('./dist/swagger2.json', JSON.stringify(res.resolved, null, 2), 'utf8');
+            if (! fs.existsSync(OUTPUT_FOLDER_NAME)){
+                fs.mkdirSync(OUTPUT_FOLDER_NAME);
+            }
             fs.writeFileSync((OUTPUT_FOLDER_NAME + OUTPUT_FILE_NAME),
                 YAML.dump(res.resolved),
                 'utf8');
