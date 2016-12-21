@@ -1,0 +1,28 @@
+# access needed for below
+#   - to create log stream - so execution trace will be captured
+#   - s3 buckets full access to create if not exists - the website bucket
+Type: AWS::IAM::Role
+Properties:
+  AssumeRolePolicyDocument:
+    Version: '2012-10-17'
+    Statement:
+      Effect: Allow
+      Principal:
+        Service: lambda.amazonaws.com
+      Action: sts:AssumeRole
+  Path: "/"
+  Policies:
+    - PolicyName: Lambda_Exec_Role_policy_with_VPC_access
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - logs:CreateLogGroup
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Resource: arn:aws:logs:*:*:*
+          - Effect: Allow
+            Action:
+              - s3:*
+            Resource: arn:aws:s3:*:*:*

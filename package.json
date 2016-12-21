@@ -6,14 +6,13 @@
   "scripts": {
     "_checkdeployenv": "node techops/scripts/nodejs/validate-deploy-env.js",
     "_applyperm": "chmod a+x -R ./techops/scripts/awscli/*.sh",
-    "_prepcfstack": "node techops/scripts/nodejs/yaml-merger",
-    "_createorupdatestack": "./techops/scripts/awscli/create_or_update_stack.sh",
+    "_prepcfstack": "node techops/scripts/nodejs/yaml-merger-cf-template",
     "_uploadartifacts": "./techops/scripts/awscli/upload_assets_to_s3.sh",
-    "start": "webpack-dev-server --inline --progress --port 8080",
-    "test": "karma start",
-    "build": "rimraf dist && webpack --config config/webpack.prod.js --progress --profile --bail",
-    "prepdeploy": "npm run _checkdeployenv && npm run _applyperm && npm run _prepcfstack && npm run _createorupdatestack",
-    "deploy": "npm run _uploadartifacts",
+    "_createorupdatestack": "./techops/scripts/awscli/create_or_update_stack.sh",
+    "build": "rimraf dist && npm run _lambdazip && npm run _prepswagger && npm run _md5 ",
+    "prepdeploy": "npm run _checkdeployenv && npm run _applyperm && rimraf .build && npm run _prepcfstack",
+    "deploy": "npm run _createorupdatestack && npm run _waitforstackcomplete && npm run _uploadartifacts",
+    "test": "echo \"Error: no test specified\" && exit 0"
     "postinstall": "typings install"
   },
   "repository": {
@@ -27,7 +26,10 @@
     "auth0",
     "learn",
     "bootstrap",
-    "webpack"
+    "webpack",
+    "aws",
+    "cloudformation",
+    "moneymanager"
   ],
   "author": "suresh.sivanantham@gmail.com",
   "license": "ISC",

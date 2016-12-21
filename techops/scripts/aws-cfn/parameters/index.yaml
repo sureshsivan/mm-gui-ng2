@@ -1,12 +1,27 @@
+ParamAppFullName:
+  Type: String
+  Description: Full Name of the App - Cannot have spaces
+ParamAppDescription:
+  Type: String
+  Description: Description of the app - Cannot have spaces
+  Default: Serverless API.
+ParamAppIdentifierCaps:
+  Type: String
+  Description: Short Name of the app - No Spaces - Uppercase
+ParamAppIdentifierSmall:
+  Type: String
+  Description: Short Name of the app - No Spaces - Lowercase
 ParamRootDomain:
   Type: String
-  Description: Root Domain under which application domain should be crated
+  Description: Root Domain under which APIs will b deployed
   AllowedPattern: "(?!-)[a-zA-Z0-9-.]{1,63}(?<!-)"
   ConstraintDescription: must be a valid DNS zone name.
-  Default: sivashub.com
-ParamAppDomain:
+ParamDeployEnv:
   Type: String
-  Description: The actual Domain name to use for the application
-  AllowedPattern: "(?!-)[a-zA-Z0-9-.]{1,63}(?<!-)"
-  ConstraintDescription: must be a valid DNS zone name.
-  Default: mm.ng2.sivashub.com
+  Description: Deploy Environment - Api gateway stage will be created accordingly
+  AllowedValues:
+    - dev
+    - int
+    - prod
+  ConstraintDescription: Must be one of the valid environments
+  Default: dev

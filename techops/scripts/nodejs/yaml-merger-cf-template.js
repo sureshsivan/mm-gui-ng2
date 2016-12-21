@@ -28,13 +28,14 @@ var mergeYaml = function(rootYaml){
                 fs.mkdirSync(OUTPUT_FOLDER_NAME);
             }
             fs.writeFileSync((OUTPUT_FOLDER_NAME + OUTPUT_FILE_NAME),
-                YAML.dump(res.resolved),
+                YAML.dump(res.resolved, null, null, {width: 5000}),
                 'utf8');
         }, function (err) {
             console.error(err.stack);
         });
 };
 var deployEnv = process.env.DEPLOY_ENV || "dev";
-var stackTemplatePath = "techops/deploy/" + deployEnv + "/" + "stack.yaml";
-console.log(stackTemplatePath);
+// var stackTemplatePath = "techops/deploy/" + deployEnv + "/" + "stack.yaml";
+var stackTemplatePath = "techops/scripts/aws-cfn/stack.yaml";
+
 mergeYaml(stackTemplatePath);
