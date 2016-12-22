@@ -9,10 +9,10 @@
     "_prepcfstack": "node techops/scripts/nodejs/yaml-merger-cf-template",
     "_uploadartifacts": "./techops/scripts/awscli/upload_assets_to_s3.sh",
     "_createorupdatestack": "./techops/scripts/awscli/create_or_update_stack.sh",
-    "build": "rimraf dist && npm run _lambdazip && npm run _prepswagger && npm run _md5 ",
+    "build": "rimraf dist && webpack --config config/webpack.prod.js --progress --profile --bail",
     "prepdeploy": "npm run _checkdeployenv && npm run _applyperm && rimraf .build && npm run _prepcfstack",
-    "deploy": "npm run _createorupdatestack && npm run _waitforstackcomplete && npm run _uploadartifacts",
-    "test": "echo \"Error: no test specified\" && exit 0"
+    "deploy": "npm run _createorupdatestack",
+    "test": "echo \"Error: no test specified\" && exit 0",
     "postinstall": "typings install"
   },
   "repository": {
