@@ -46,6 +46,132 @@ Properties:
         requestParams['rootDomainName']
         rootDomainName = event.ResourceProperties.rootDomainName,
         region = event.ResourceProperties.region || 'us-east-1';
+        
+        
+        
+        var createBucketIfNotExist = function (event, context, cb) {
+            var nakedBucketName = event.ResourceProperties.appNakedDomainName,
+                wwwBucketName = event.ResourceProperties.appWWWDomainName;
+            var nakedBucketCreationResponse = {
+                success: false,     // to see if bucket creation was a success
+                complete: false,    // to see bucket creation request is completed - it might be a success or failure
+                bucketData: {},
+                errorData: {}
+            };
+            var wwwBucketCreationResponse = {
+                success: false,
+                complete: false,
+                bucketData: {},
+                errorData: {}
+            };
+            var handleResponseCallback = function(){
+                var response = {
+                    error: false,
+                    nakedBucket: {},
+                    wwwBucket: {}
+                };
+                if(nakedBucketCreationResponse.complete && wwwBucketCreationResponse.complete){
+                    response.error = nakedBucketCreationResponse.success && wwwBucketCreationResponse.success;  // overall status
+                    if(nakedBucketCreationResponse.success){
+                        response.nakedBucket.bucketData = nakedBucketCreationResponse.bucketData
+                    } else {
+                        response.nakedBucket.errorData = nakedBucketCreationResponse.errorData
+                    }
+                    if(wwwBucketCreationResponse.success){
+                        response.nakedBucket.bucketData = wwwBucketCreationResponse.bucketData
+                    } else {
+                        response.nakedBucket.errorData = wwwBucketCreationResponse.errorData
+                    }
+                    cb.call(null, response);
+                }
+            };
+            var handleTerminalStatus = function(bucketResponseObj, bucketName, successFlag, successData, errorData, errorMessage){
+                bucketResponseObj.complete = true;
+                bucketResponseObj.success = successFlag;
+                if(successFlag){
+                    nakedBucketCreationResponse.bucketData = successData;
+                } else {
+                    bucketResponseObj.errorData = {
+                        bucketName: bucketName,
+                        errorMessage: errorMessage,
+                        err: errorData
+                    };
+                }
+                handleResponseCallback();
+            };
+            s3.headBucket({Bucket: nakedBucketName}, function(err, data) {
+                if(err && err.statusCode == 403) {    // bucket is created by someone else - so we cannot create it
+                    handleTerminalStatus(nakedBucketCreationResponse, nakedBucketName, false, null, err, "Naked Bucket Already in Use by someone else");
+                } else if(err && err.statusCode == 404){    // bucket not found - so we can create a new one
+                    s3.createBucket({
+                        Bucket: nakedBucketName,
+                        ACL: 'public-read'
+                    }, function(err1, data1){
+                        if(err1){
+                            handleTerminalStatus(nakedBucketCreationResponse, nakedBucketName, false, null, err, "Error in Naked Bucket Creation");
+                        } else {    // bucket creation success - add properties for website
+                            s3.putBucketWebsite({
+                                Bucket: nakedBucketName,
+                                ErrorDocument: {
+                                    Key: 'index.html'
+                                },
+                                IndexDocument: {
+                                    Suffix: 'site-error.html'
+                                }
+                            }, function(err3, data3){
+                                if(err3){
+                                    handleTerminalStatus(nakedBucketCreationResponse, nakedBucketName, false, null, err, "Error in Naked Bucket Website Configuration");
+                                } else {
+                                    handleTerminalStatus(nakedBucketCreationResponse, nakedBucketName, true, data3);
+                                }
+                            });
+                        }
+                    });
+                } else {    // bucket already exists and i can access
+                    handleTerminalStatus(nakedBucketCreationResponse, nakedBucketName, true, data);
+                }
+            });
+            s3.headBucket({Bucket: wwwBucketName}, function(err, data) {
+                if(err && err.statusCode == 403) {    // bucket is created by someone else - so we cannot create it
+                    handleTerminalStatus(wwwBucketCreationResponse, wwwBucketName, false, null, err, "Naked Bucket Already in Use by someone else");
+                } else if(err && err.statusCode == 404){    // bucket not found - so we can create a new one
+                    s3.createBucket({
+                        Bucket: wwwBucketName,
+                        ACL: 'public-read'
+                    }, function(err1, data1){
+                        if(err1){
+                            handleTerminalStatus(wwwBucketCreationResponse, wwwBucketName, false, null, err, "Error in Naked Bucket Creation");
+                        } else {    // bucket creation success - add properties for website
+                            s3.putBucketWebsite({
+                                Bucket: nakedBucketName,
+                                RedirectAllRequestsTo: {
+                                    HostName: 'STRING_VALUE'
+                                },
+                            }, function(err3, data3){
+                                if(err3){
+                                    handleTerminalStatus(wwwBucketCreationResponse, wwwBucketName, false, null, err, "Error in Naked Bucket Website Configuration");
+                                } else {
+                                    handleTerminalStatus(wwwBucketCreationResponse, wwwBucketName, true, data3);
+                                }
+                            });
+                        }
+                    });
+                } else {    // bucket already exists and i can access
+                    handleTerminalStatus(wwwBucketCreationResponse, wwwBucketName, true, data);
+                }
+            });
+        };
+    
+        http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#createBucket-property
+        var deleteBucket = function (event, context) {
+            var rootDomainName = event.ResourceProperties.rootDomainName;
+            var region = event.ResourceProperties.region || 'us-east-1';
+            var nakedBucketName = rootDomainName,
+                wwwBucketName = 'www.' + nakedBucketName;
+            // delete bucket contents if exist
+        }
+    
+    
         if(event.RequestType == 'Create'){
             // create the bucket if not exist
             createBucketIfNotExist(event, context);
@@ -56,6 +182,8 @@ Properties:
             // delete the bucket content
             deleteBucket(event, context);
         }
+        
+        
       };
       
       
