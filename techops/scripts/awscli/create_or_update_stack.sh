@@ -38,6 +38,32 @@ CF_STACK_FILE="file://.build/stack-template.yaml"
 #  X UPDATE_ROLLBACK_COMPLETE
 STACK_ALIVE="$("$AWS_CLI" cloudformation list-stacks --stack-status-filter CREATE_COMPLETE UPDATE_COMPLETE | grep "$STACK_NAME")"
 
+NAKED_BUCKET_NAME=$APP_ID_LOWERCASE.$ROOT_DOMAIN_NAME
+WWW_BUCKET_NAME=www.$APP_ID_LOWERCASE.$ROOT_DOMAIN_NAME
+
+NAKED_BUCKET_EXISTS_SOMEWHERE_ELSE="$(aws s3 ls s3://"NAKED_BUCKET_NAME" | grep -o "AllAccessDisabled")"
+WWW_BUCKET_EXISTS_SOMEWHERE_ELSE="$(aws s3 ls s3://"NAKED_BUCKET_NAME" | grep -o "AllAccessDisabled")"
+
+if [[ -z NAKED_BUCKET_EXISTS_SOMEWHERE_ELSE || -z WWW_BUCKET_EXISTS_SOMEWHERE_ELSE ]]; then
+  echo 'Bucket for the Domain already exists with someother AWS account'
+  exit 61
+fi
+
+NAKED_BUCKET_NOT_EXISTS="$(aws s3 ls s3://"NAKED_BUCKET_NAME" | grep -o "NoSuchBucket")"
+WWW_BUCKET_NOT_EXISTS="$(aws s3 ls s3://"NAKED_BUCKET_NAME" | grep -o "NoSuchBucket")"
+NAKED_BUCKET_SKIP_CREATION="FALSE"
+CREATE_WWW_SKIP_CREATION="FALSE"
+
+#// empty means bucket exists under own account
+if [[ -z NAKED_BUCKET_NOT_EXISTS ]]; then   
+  NAKED_BUCKET_SKIP_CREATION="TRUE"
+fi
+
+# // empty means bucket exists under own account
+if [[ -z WWW_BUCKET_NOT_EXISTS ]]; then     
+  WWW_BUCKET_SKIP_CREATION="TRUE"
+fi
+
 # check whether LAMBDA_FILE_NAME and SWAGGER_FILE_NAME has proper value and return a non zero exit code if not
 # no need to trigger the build.
 
@@ -54,6 +80,8 @@ if [ -z "$STACK_ALIVE" ]; then
                 ParameterKey=ParamAppIdentifierSmall,ParameterValue=$APP_ID_LOWERCASE                                               \
                 ParameterKey=ParamRootDomain,ParameterValue=$ROOT_DOMAIN_NAME                                                       \
                 ParameterKey=ParamDeployEnv,ParameterValue=$DEPLOY_ENV                                                              \
+                ParameterKey=ParamSkipNakedBucketCreation,ParameterValue=$NAKED_BUCKET_SKIP_CREATION                                \
+                ParameterKey=ParamSkipWWWBucketCreation,ParameterValue=$WWW_BUCKET_SKIP_CREATION                                    \
             --region $AWS_REGION
     echo "[INFO] STACK CREATION : Kicked Off"
 else

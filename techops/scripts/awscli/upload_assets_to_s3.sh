@@ -9,6 +9,8 @@ if [ "$DEPLOY_ENV" != "prod" ]; then
 fi
 
 
+# // think of s3 syncing here - so no need to upload the unchanged files..
+
 echo "[INFO] Deleting all the files from bucket : ${APP_DOMAIN_NAME}"
 $AWS_CLI s3 rm s3://$APP_DOMAIN_NAME --recursive
 
