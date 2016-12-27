@@ -1,0 +1,28 @@
+Type: Custom::ResourceCreateWebsiteBucketCustom
+DependsOn:
+  - ResourceBucketCreationCustomLambdaFunction
+Properties:
+  ServiceToken:
+    Fn::GetAtt:
+     - ResourceBucketCreationCustomLambdaFunction
+     - Arn
+  appNakedDomainName:
+    Fn::Join:
+      - ''
+      - - Ref: ParamDeployEnv
+        - '.'
+        - Ref: ParamAppIdentifierSmall
+        - '.'
+        - 'ui'
+        - '.'
+        - Ref: ParamRootDomain
+  appWWWDomainName:
+    Fn::Join:
+      - ''
+      - - Ref: ParamDeployEnv
+        - '.'
+        - Ref: ParamAppIdentifierSmall
+        - '.'
+        - 'ui'
+        - '.'
+        - Ref: ParamRootDomain
