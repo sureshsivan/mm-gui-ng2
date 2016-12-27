@@ -1,0 +1,156 @@
+Type: AWS::Lambda::Function
+Properties:
+  Handler: index.handler
+  Role:
+    Fn::GetAtt:
+      - ResourceCustomLambdaFunctionForCFRole
+      - Arn
+  FunctionName:
+    Fn::Join:
+      - ''
+      - - '_'
+        - Ref: ParamDeployEnv
+        - Ref: ParamAppIdentifierCaps
+        - 'BucketCreationLambdaFunction'
+  Timeout: 20
+  Runtime: nodejs4.3
+  Code:
+    ZipFile: |
+      var cfnResponse = require('cfn-response');
+      var AWS = require('aws-sdk');
+      var s3 = new AWS.S3();
+      exports.handler = function(event, context){
+        var createBucketIfNotExist = function (event, context, cb) {
+            var nakedBucketName = event.ResourceProperties.appNakedDomainName,
+                wwwBucketName = event.ResourceProperties.appWWWDomainName;
+            var nakedBucketCreationResponse = {
+                success: false,
+                complete: false,
+                bucketData: {},
+                errorData: {}
+            };
+            var wwwBucketCreationResponse = {
+                success: false,
+                complete: false,
+                bucketData: {},
+                errorData: {}
+            };
+            var handleResponseCallback = function(){
+              var response = {
+                error: false,
+                nakedBucket: {},
+                wwwBucket: {}
+              };
+              if(nakedBucketCreationResponse.complete && wwwBucketCreationResponse.complete){
+                response.error = nakedBucketCreationResponse.success && wwwBucketCreationResponse.success;  // overall status
+                if(nakedBucketCreationResponse.success){
+                    response.nakedBucket.bucketData = nakedBucketCreationResponse.bucketData
+                } else {
+                    response.nakedBucket.errorData = nakedBucketCreationResponse.errorData
+                }
+                if(wwwBucketCreationResponse.success){
+                    response.nakedBucket.bucketData = wwwBucketCreationResponse.bucketData
+                } else {
+                    response.nakedBucket.errorData = wwwBucketCreationResponse.errorData
+                }
+                console.log('RESPONSE SENT:', JSON.stringify(arguments));
+                if(response.error){
+                  cfnResponse.send(event, context, cfnResponse.FAILED, response);
+                } else {
+                  cfnResponse.send(event, context, cfnResponse.SUCCESS, response);
+                }
+              }    
+            };
+            var handleTerminalStatus = function(bucketResponseObj, bucketName, successFlag, successData, errorData, errorMessage){
+              console.log('TERMINAL STATUS REACHED:', JSON.stringify(arguments));
+              bucketResponseObj.complete = true;
+              bucketResponseObj.success = successFlag;
+              if(successFlag){
+                  nakedBucketCreationResponse.bucketData = successData;
+              } else {
+                  bucketResponseObj.errorData = {
+                      bucketName: bucketName,
+                      errorMessage: errorMessage,
+                      err: errorData
+                  };
+              }
+              handleResponseCallback();
+            };
+            s3.headBucket({Bucket: nakedBucketName}, function(err, data) {
+                if(err && err.statusCode == 403) {
+                    handleTerminalStatus(nakedBucketCreationResponse, nakedBucketName, false, null, err, "Naked Bucket Already in Use by someone else");
+                } else if(err && err.statusCode == 404){
+                    s3.createBucket({
+                        Bucket: nakedBucketName,
+                        ACL: 'public-read'
+                    }, function(err1, data1){
+                        if(err1){
+                            handleTerminalStatus(nakedBucketCreationResponse, nakedBucketName, false, null, err, "Error in Naked Bucket Creation");
+                        } else {
+                            s3.putBucketWebsite({
+                                Bucket: nakedBucketName,
+                                ErrorDocument: {
+                                    Key: 'index.html'
+                                },
+                                IndexDocument: {
+                                    Suffix: 'site-error.html'
+                                }
+                            }, function(err3, data3){
+                                if(err3){
+                                    handleTerminalStatus(nakedBucketCreationResponse, nakedBucketName, false, null, err, "Error in Naked Bucket Website Configuration");
+                                } else {
+                                    handleTerminalStatus(nakedBucketCreationResponse, nakedBucketName, true, data3);
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    handleTerminalStatus(nakedBucketCreationResponse, nakedBucketName, true, data);
+                }
+            });
+            s3.headBucket({Bucket: wwwBucketName}, function(err, data) {
+                if(err && err.statusCode == 403) {
+                    handleTerminalStatus(wwwBucketCreationResponse, wwwBucketName, false, null, err, "Naked Bucket Already in Use by someone else");
+                } else if(err && err.statusCode == 404){
+                    s3.createBucket({
+                        Bucket: wwwBucketName,
+                        ACL: 'public-read'
+                    }, function(err1, data1){
+                        if(err1){
+                            handleTerminalStatus(wwwBucketCreationResponse, wwwBucketName, false, null, err, "Error in Naked Bucket Creation");
+                        } else {
+                            s3.putBucketWebsite({
+                                Bucket: wwwBucketName,
+                                RedirectAllRequestsTo: {
+                                    HostName: nakedBucketName
+                                },
+                            }, function(err3, data3){
+                                if(err3){
+                                    handleTerminalStatus(wwwBucketCreationResponse, wwwBucketName, false, null, err, "Error in Naked Bucket Website Configuration");
+                                } else {
+                                    handleTerminalStatus(wwwBucketCreationResponse, wwwBucketName, true, data3);
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    handleTerminalStatus(wwwBucketCreationResponse, wwwBucketName, true, data);
+                }
+            });
+        };
+  
+        var deleteBucket = function (event, context) {
+          console.log("Simulating Delete Bucket");
+          response.send(event, context, response.SUCCESS, {});
+        };
+    
+        if(event.RequestType == 'Create'){
+            createBucketIfNotExist(event, context);
+        } else if(event.RequestType == 'Update'){
+            createBucketIfNotExist(event, context);
+        } else if(event.RequestType == 'Delete'){
+            deleteBucket(event, context);
+        }
+      };
+
+var cfnResponse=require("cfn-response"),AWS=require("aws-sdk"),s3=new AWS.S3;exports.handler=function(e,t){var r=function(e,t,r){var s=e.ResourceProperties.appNakedDomainName,c=e.ResourceProperties.appWWWDomainName,u={success:!1,complete:!1,bucketData:{},errorData:{}},n={success:!1,complete:!1,bucketData:{},errorData:{}},a=function(){var r={error:!1,nakedBucket:{},wwwBucket:{}};u.complete&&n.complete&&(r.error=u.success&&n.success,u.success?r.nakedBucket.bucketData=u.bucketData:r.nakedBucket.errorData=u.errorData,n.success?r.nakedBucket.bucketData=n.bucketData:r.nakedBucket.errorData=n.errorData,console.log("RESPONSE SENT:",JSON.stringify(arguments)),r.error?cfnResponse.send(e,t,cfnResponse.FAILED,r):cfnResponse.send(e,t,cfnResponse.SUCCESS,r))},o=function(e,t,r,s,c,n){console.log("TERMINAL STATUS REACHED:",JSON.stringify(arguments)),e.complete=!0,e.success=r,r?u.bucketData=s:e.errorData={bucketName:t,errorMessage:n,err:c},a()};s3.headBucket({Bucket:s},function(e,t){e&&403==e.statusCode?o(u,s,!1,null,e,"Naked Bucket Already in Use by someone else"):e&&404==e.statusCode?s3.createBucket({Bucket:s,ACL:"public-read"},function(t,r){t?o(u,s,!1,null,e,"Error in Naked Bucket Creation"):s3.putBucketWebsite({Bucket:s,ErrorDocument:{Key:"index.html"},IndexDocument:{Suffix:"site-error.html"}},function(t,r){t?o(u,s,!1,null,e,"Error in Naked Bucket Website Configuration"):o(u,s,!0,r)})}):o(u,s,!0,t)}),s3.headBucket({Bucket:c},function(e,t){e&&403==e.statusCode?o(n,c,!1,null,e,"Naked Bucket Already in Use by someone else"):e&&404==e.statusCode?s3.createBucket({Bucket:c,ACL:"public-read"},function(t,r){t?o(n,c,!1,null,e,"Error in Naked Bucket Creation"):s3.putBucketWebsite({Bucket:c,RedirectAllRequestsTo:{HostName:s}},function(t,r){t?o(n,c,!1,null,e,"Error in Naked Bucket Website Configuration"):o(n,c,!0,r)})}):o(n,c,!0,t)})},s=function(e,t){console.log("Simulating Delete Bucket"),response.send(e,t,response.SUCCESS,{})};"Create"==e.RequestType?r(e,t):"Update"==e.RequestType?r(e,t):"Delete"==e.RequestType&&s(e,t)};

@@ -18,11 +18,6 @@ Properties:
         Statement:
           - Effect: Allow
             Action:
-              - logs:CreateLogGroup
-              - logs:CreateLogStream
-              - logs:PutLogEvents
-            Resource: arn:aws:logs:*:*:*
-          - Effect: Allow
-            Action:
+              - logs:*
               - s3:*
-            Resource: arn:aws:s3:*:*:*
+            Resource: '*'
