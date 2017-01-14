@@ -1,5 +1,4 @@
 Type: AWS::Route53::RecordSetGroup
-Condition:  IsProdEnv
 Properties:
   HostedZoneName:
     Fn::Join:
@@ -10,7 +9,8 @@ Properties:
     - Name:
         Fn::Join:
         - "."
-        - - Ref: ParamAppIdentifierSmall
+        - - Ref: ParamDeployEnv
+          - Ref: ParamAppIdentifierSmall
           - Ref: ParamRootDomain
       Type: A
       AliasTarget:
@@ -28,6 +28,7 @@ Properties:
         Fn::Join:
         - "."
         - - www
+          - Ref: ParamDeployEnv
           - Ref: ParamAppIdentifierSmall
           - Ref: ParamRootDomain
       Type: A

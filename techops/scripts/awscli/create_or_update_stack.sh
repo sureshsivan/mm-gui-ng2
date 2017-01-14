@@ -78,8 +78,6 @@ if [ -z "$STACK_ALIVE" ]; then
                 ParameterKey=ParamAppIdentifierSmall,ParameterValue=$APP_ID_LOWERCASE                                               \
                 ParameterKey=ParamRootDomain,ParameterValue=$ROOT_DOMAIN_NAME                                                       \
                 ParameterKey=ParamDeployEnv,ParameterValue=$DEPLOY_ENV                                                              \
-                ParameterKey=ParamSkipNakedBucketCreation,ParameterValue=$NAKED_BUCKET_SKIP_CREATION                                \
-                ParameterKey=ParamSkipWWWBucketCreation,ParameterValue=$WWW_BUCKET_SKIP_CREATION                                    \
             --region $AWS_REGION
     echo "[INFO] STACK CREATION : Kicked Off"
 else

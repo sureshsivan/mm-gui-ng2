@@ -1,15 +1,25 @@
-BucketTest1:
+S3WebsiteEndpointUrl:
   Value:
     Fn::GetAtt:
-    - ResourceCreateWebsiteBucketCustom
-    - error
-BucketTest2:
+    - ResourceWebsiteS3Bucket
+    - WebsiteURL
+S3WebsiteWWWRedirectEndpointUrl:
   Value:
     Fn::GetAtt:
-    - ResourceCreateWebsiteBucketCustom
-    - nakedBucket.bucketData.endpointUrl
-BucketTest3:
+    - ResourceWWWRedirectS3Bucket
+    - WebsiteURL
+AppNakedUrl:
   Value:
-    Fn::GetAtt:
-    - ResourceCreateWebsiteBucketCustom
-    - wwwBucket.bucketData.endpointUrl
+    Fn::Join:
+    - "."
+    - - Ref: ParamDeployEnv
+      - Ref: ParamAppIdentifierSmall
+      - Ref: ParamRootDomain
+AppWWWUrl:
+  Value:
+    Fn::Join:
+    - "."
+    - - www
+      - Ref: ParamDeployEnv
+      - Ref: ParamAppIdentifierSmall
+      - Ref: ParamRootDomain

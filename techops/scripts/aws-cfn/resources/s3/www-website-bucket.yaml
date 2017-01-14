@@ -6,9 +6,16 @@ Properties:
     Fn::Join:
     - "."
     - - www
-      - Ref: ParamAppDomain
+      - Ref: ParamDeployEnv
+      - Ref: ParamAppIdentifierSmall
+      - Ref: ParamRootDomain
+      - Ref: AWS::AccountId
   AccessControl: BucketOwnerFullControl
   WebsiteConfiguration:
     RedirectAllRequestsTo:
       HostName:
-        Ref: ParamAppDomain
+        Fn::Join:
+        - "."
+        - - Ref: ParamDeployEnv
+          - Ref: ParamAppIdentifierSmall
+          - Ref: ParamRootDomain

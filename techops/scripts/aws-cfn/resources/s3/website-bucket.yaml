@@ -1,7 +1,12 @@
 Type: AWS::S3::Bucket
 Properties:
   BucketName:
-    Ref: ParamAppDomain
+    Fn::Join:
+    - "."
+    - - Ref: ParamDeployEnv
+      - Ref: ParamAppIdentifierSmall
+      - Ref: ParamRootDomain
+      - Ref: AWS::AccountId
   AccessControl: PublicRead
   WebsiteConfiguration:
     IndexDocument: index.html

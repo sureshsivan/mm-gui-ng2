@@ -1,0 +1,12 @@
+- Key:
+    AppName
+  Value:
+    Ref: ParamAppFullName
+- Key:
+    AppIdentifierCaps
+  Value:
+    Ref: ParamAppIdentifierCaps
+- Key:
+    AppIdentifierSmall
+  Value:
+    Ref: ParamAppIdentifierSmall
