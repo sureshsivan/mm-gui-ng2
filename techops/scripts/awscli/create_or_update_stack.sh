@@ -55,12 +55,12 @@ STACK_ALIVE="$("$AWS_CLI" cloudformation list-stacks --stack-status-filter CREAT
 # CREATE_WWW_SKIP_CREATION="FALSE"
 
 # #// empty means bucket exists under own account
-# if [[ -z NAKED_BUCKET_NOT_EXISTS ]]; then   
+# if [[ -z NAKED_BUCKET_NOT_EXISTS ]]; then
 #   NAKED_BUCKET_SKIP_CREATION="TRUE"
 # fi
 
 # # // empty means bucket exists under own account
-# if [[ -z WWW_BUCKET_NOT_EXISTS ]]; then     
+# if [[ -z WWW_BUCKET_NOT_EXISTS ]]; then
 #   WWW_BUCKET_SKIP_CREATION="TRUE"
 # fi
 

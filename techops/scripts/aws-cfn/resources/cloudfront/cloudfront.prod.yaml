@@ -1,4 +1,5 @@
 Type: AWS::CloudFront::Distribution
+Condition:  IsProdEnv
 DependsOn:
 - ResourceWWWRedirectS3Bucket
 Properties:

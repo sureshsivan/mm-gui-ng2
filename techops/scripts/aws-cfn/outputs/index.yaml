@@ -11,15 +11,22 @@ S3WebsiteWWWRedirectEndpointUrl:
 AppNakedUrl:
   Value:
     Fn::Join:
-    - "."
-    - - Ref: ParamDeployEnv
-      - Ref: ParamAppIdentifierSmall
-      - Ref: ParamRootDomain
+    - ''
+    - - 'http://'
+      - Fn::Join:
+        - "."
+        - - Ref: ParamDeployEnv
+          - Ref: ParamAppIdentifierSmall
+          - Ref: ParamRootDomain
 AppWWWUrl:
   Value:
     Fn::Join:
-    - "."
-    - - www
-      - Ref: ParamDeployEnv
-      - Ref: ParamAppIdentifierSmall
-      - Ref: ParamRootDomain
+    - ''
+    - - 'http://'
+      - Fn::Join:
+        - "."
+        - - www
+          - Ref: ParamDeployEnv
+          - Ref: ParamAppIdentifierSmall
+          - Ref: ParamRootDomain
+

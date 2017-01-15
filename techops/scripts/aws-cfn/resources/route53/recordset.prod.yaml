@@ -14,16 +14,15 @@ Properties:
           - Ref: ParamRootDomain
       Type: A
       AliasTarget:
-        DNSName:
-          Fn::FindInMap:
-          - RegionMap
-          - Ref: AWS::Region
-          - websiteendpoint
         HostedZoneId:
           Fn::FindInMap:
-          - RegionMap
-          - Ref: AWS::Region
-          - S3hostedzoneID
+          - HostedZones
+          - CloudFront
+          - ZoneId
+        DNSName:
+          Fn::GetAtt:
+          - ResourceCloudFrontDistribution
+          - DomainName
     - Name:
         Fn::Join:
         - "."
@@ -32,13 +31,12 @@ Properties:
           - Ref: ParamRootDomain
       Type: A
       AliasTarget:
-        DNSName:
-          Fn::FindInMap:
-          - RegionMap
-          - Ref: AWS::Region
-          - websiteendpoint
         HostedZoneId:
           Fn::FindInMap:
-          - RegionMap
-          - Ref: AWS::Region
-          - S3hostedzoneID
+          - HostedZones
+          - CloudFront
+          - ZoneId
+        DNSName:
+          Fn::GetAtt:
+          - ResourceCloudFrontDistribution
+          - DomainName
