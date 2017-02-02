@@ -1,7 +1,7 @@
 language: node_js
 
 node_js:
-  - "5.11"
+  - "4.5"
 
 env: |
   - APP_FULL_NAME="Money_Manager_Angular2_UI"
@@ -15,7 +15,7 @@ env: |
     CXX="g++-4.8"
 
 # - this one is needed if we have to use any natine compilation for node modules -w arn by travis build
-#  
+#
 # addons:
 #   apt:
 #     sources:
