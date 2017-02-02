@@ -10,7 +10,7 @@
     "_uploadartifacts": "./techops/scripts/awscli/upload_assets_to_s3.sh",
     "_createorupdatestack": "./techops/scripts/awscli/create_or_update_stack.sh",
     "_webpack": "webpack --config config/webpack.prod.js --progress --profile --bail",
-    "start": "webpack-dev-server --inline --progress --port 8080",
+    "start": "webpack-dev-server --inline --progress --port 8889",
     "build": "rimraf dist && npm run _webpack",
     "prepdeploy": "npm run _checkdeployenv && npm run _applyperm && rimraf .build && npm run _prepcfstack",
     "deploy": "npm run _createorupdatestack && npm run _uploadartifacts",
