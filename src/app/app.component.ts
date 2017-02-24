@@ -9,7 +9,7 @@ declare var $: any
 })
 export class AppComponent implements OnInit{
   ngOnInit(): void {
-    this.showModal = false;
+    // this.showModal = false;
   }
   showModal:boolean = false;
   toggleModal(event:any){
