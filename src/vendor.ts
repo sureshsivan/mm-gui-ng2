@@ -11,7 +11,7 @@ import 'rxjs';
 // You can import js, ts, css, sass, ...
 
 import 'jquery/dist/jquery.js';
-import "bootstrap/scss/bootstrap.scss"
+// import 'bootstrap/scss/bootstrap.scss'
 
 // import 'semantic-ui-css/semantic.css';
 // import 'semantic-ui-css/semantic.js';
