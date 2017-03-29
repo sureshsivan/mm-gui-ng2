@@ -1,7 +1,7 @@
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { enableProdMode } from '@angular/core';
-import { AppModule } from './app/components/app/app.module';
-import './app/themes/app-theme.default.scss';
+import { AppModule } from './app/app.module';
+import './themes/app-theme.default.scss';
 
 
 if (process.env.ENV === 'production') {
