@@ -1,7 +1,7 @@
 language: node_js
 
 node_js:
-  - "6.9.0"
+  - "6.9.5"
 
 env: |
   - APP_FULL_NAME="Money_Manager_Angular2_UI"
@@ -12,7 +12,7 @@ env: |
     DEPLOY_ENV="dev"
     AWS_DEFAULT_REGION="us-east-1"
     AWS_REGION="us-east-1"
-    CXX="g++-4.8"
+#    CXX="g++-4.8"
 
 # - this one is needed if we have to use any natine compilation for node modules -w arn by travis build
 #
