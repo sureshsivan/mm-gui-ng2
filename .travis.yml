@@ -1,7 +1,7 @@
 language: node_js
 
 node_js:
-  - "4.5"
+  - "6.9.0"
 
 env: |
   - APP_FULL_NAME="Money_Manager_Angular2_UI"
