@@ -42,7 +42,7 @@ module.exports = {
         loaders: ['html-loader']
       }, {
         test: /\.scss$|\.sass$/,    //  all application sass files
-        use: ['raw-loader', 'css-loader', 'sass-loader'],
+        use: ['raw-loader', 'sass-loader'],
         include: [helpers.root('src', 'app', 'app.component.scss'), helpers.root('src', 'app', 'modules')]
       }, {
         test: /\.scss$|\.sass$/,    // all vendor sass files and theme level overrides
