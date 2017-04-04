@@ -4,7 +4,7 @@ const ProgressPlugin = require('webpack/lib/ProgressPlugin');
 const { CommonsChunkPlugin } = require('webpack').optimize;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-
+const autoprefixer = require('autoprefixer');
 const vendorCssExtractPlugin = new ExtractTextPlugin('vendor_custom.[hash].css');
 const appCssExtractPlugin = new ExtractTextPlugin('app.[hash].css');
 
@@ -131,6 +131,14 @@ module.exports = {
       Util: "exports-loader?Util!bootstrap/js/dist/util"
     }),
     new ProgressPlugin(),
-    new ExtractTextPlugin('vendor.[hash].css')
+    new ExtractTextPlugin('vendor.[hash].css'),
+    new LoaderOptionsPlugin({
+      options: {
+        context: __dirname,
+        postcss: [
+          autoprefixer
+        ]
+      }
+    })
   ]
 };
