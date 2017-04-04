@@ -28,7 +28,7 @@ env: |
 #  - docker
 
 script:
-  yarn build
+  npm rebuild node-sass && yarn build
 
 before_deploy:
    pip install --user awscli
