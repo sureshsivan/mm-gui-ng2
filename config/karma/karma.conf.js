@@ -1,8 +1,8 @@
-var webpackConfig = require('./webpack.test');
+var webpackConfig = require('./../webpack/webpack.test.js');
 
 module.exports = function (config) {
     var _config = {
-        basePath: '',
+        basePath: '../),
 
         frameworks: ['jasmine'],
 

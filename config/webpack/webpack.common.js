@@ -8,16 +8,18 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const vendorCssExtractPlugin = new ExtractTextPlugin('vendor_custom.[hash].css');
 const appCssExtractPlugin = new ExtractTextPlugin('app.[hash].css');
 
-const helpers = require('./helpers');
+const helpers = require('./../helpers');
 const nodeModules = path.join(process.cwd(), 'node_modules');
-const entryPoints = ["inline", "polyfills", "vendor","app"];
+const entryPoints = ["inline", "polyfills", "vendor", "bootstrap", "fa", "app"];
 
 // const VENDOR_JS_LIBS = ["jquery", ""];
 
 module.exports = {
   entry: {
     'polyfills': './src/polyfills.ts',    // for all polyfill browser compatibilities
-    'app': './src/main.ts'                // actual source code
+    'app': './src/main.ts',                // actual source code
+    'fa': `font-awesome-sass-loader!${__dirname}/../font-awesome/font-awesome.config.js`,    // for font-awesome
+    'bootstrap': `bootstrap-loader/lib/bootstrap.loader?configFilePath=${__dirname}/../bootstrap/bootstraprc.config.yaml!bootstrap-loader/no-op.js`   // for bootstrap
   },
   output: {
     path: helpers.root('dist'),
@@ -32,25 +34,36 @@ module.exports = {
   module: {
     rules: [{
         test: /\.ts$/,
-        loaders: [{
+        use: [{
           loader: 'awesome-typescript-loader',
           options: { configFileName: helpers.root('src', 'tsconfig.json') }
         }, 'angular2-template-loader'],
         exclude: [/\.(spec|e2e)\.ts$/]
       }, {
         test: /\.html$/,
-        loaders: ['html-loader']
+        use: ['html-loader']
       }, {
         test: /\.scss$|\.sass$/,    //  all application sass files
         use: ['raw-loader', 'sass-loader'],
         include: [helpers.root('src', 'app', 'app.component.scss'), helpers.root('src', 'app', 'modules')]
+      // }, {
+      //   test: /\.scss$|\.sass$/,    // all vendor sass files and theme level overrides
+      //   use: ExtractTextPlugin.extract({fallback: 'style-loader', use: ['css-loader', 'sass-loader']}),
+      //   include: [helpers.root('src', 'themes')]
       }, {
-        test: /\.scss$|\.sass$/,    // all vendor sass files and theme level overrides
-        use: ExtractTextPlugin.extract({fallback: 'style-loader', use: ['css-loader', 'sass-loader']}),
-        include: [helpers.root('src', 'themes')]
+        test: /\.scss$|\.sass$/,    //  all NON application sass files
+        use: ['raw-loader', 'sass-loader'],
+        // use: ExtractTextPlugin.extract({fallback: 'style-loader', use: ['css-loader', 'sass-loader']}),
+        exclude: [helpers.root('src', 'app', 'app.component.scss'), helpers.root('src', 'app', 'modules')]
       }, {
-        test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
-        loader: 'file-loader?name=assets/[name].[hash].[ext]'
+        test: /bootstrap[\/\\]dist[\/\\]js[\/\\]umd[\/\\]/,
+        use: 'imports-loader?jQuery=jquery'
+      }, {
+        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        use: "url-loader?limit=10000&name=assets/[name].[hash].[ext]&mimetype=application/font-woff"
+      }, {
+        test: /\.(jpe?g|gif|ico|png|ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        use: "file-loader?name=assets/[name].[hash].[ext]"
     }]
   },
 
@@ -101,7 +114,21 @@ module.exports = {
     }),
     new ProvidePlugin({
       $: "jquery",
-      jQuery: "jquery"
+      jQuery: "jquery",
+      "window.jQuery": "jquery",
+      Tether: "tether",
+      "window.Tether": "tether",
+      Tooltip: "exports-loader?Tooltip!bootstrap/js/dist/tooltip",
+      Alert: "exports-loader?Alert!bootstrap/js/dist/alert",
+      Button: "exports-loader?Button!bootstrap/js/dist/button",
+      Carousel: "exports-loader?Carousel!bootstrap/js/dist/carousel",
+      Collapse: "exports-loader?Collapse!bootstrap/js/dist/collapse",
+      Dropdown: "exports-loader?Dropdown!bootstrap/js/dist/dropdown",
+      Modal: "exports-loader?Modal!bootstrap/js/dist/modal",
+      Popover: "exports-loader?Popover!bootstrap/js/dist/popover",
+      Scrollspy: "exports-loader?Scrollspy!bootstrap/js/dist/scrollspy",
+      Tab: "exports-loader?Tab!bootstrap/js/dist/tab",
+      Util: "exports-loader?Util!bootstrap/js/dist/util"
     }),
     new ProgressPlugin(),
     new ExtractTextPlugin('vendor.[hash].css')
