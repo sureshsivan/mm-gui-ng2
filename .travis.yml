@@ -28,17 +28,17 @@ env: |
 #  - docker
 
 script:
-  npm run build
+  yarn build
 
 before_deploy:
    pip install --user awscli
 
 deploy:
   - provider: script
-    script: npm run prepdeploy
+    script: yarn prepdeploy
     skip_cleanup: true
   - provider: script
-    script: npm run deploy
+    script: yarn deploy
     skip_cleanup: true
 
 
