@@ -5,8 +5,8 @@ const { CommonsChunkPlugin } = require('webpack').optimize;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const autoprefixer = require('autoprefixer');
-const vendorCssExtractPlugin = new ExtractTextPlugin('vendor_custom.[hash].css');
-const appCssExtractPlugin = new ExtractTextPlugin('app.[hash].css');
+// const vendorCssExtractPlugin = new ExtractTextPlugin('vendor_custom.[hash].css');
+// const appCssExtractPlugin = new ExtractTextPlugin('app.[hash].css');
 
 const helpers = require('./../helpers');
 const nodeModules = path.join(process.cwd(), 'node_modules');
