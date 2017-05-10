@@ -6,5 +6,5 @@ import {Component}  from '@angular/core';
   styleUrls: ['./topbar.component.scss']
 })
 export class TopBarComponent{
-
+  private appTitleTxt = 'Awesome App';
 }

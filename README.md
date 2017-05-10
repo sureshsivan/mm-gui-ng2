@@ -5,3 +5,6 @@
 test commit with ssh
 https://github.com/AngularClass/angular2-webpack-starter/blob/master/config/webpack.common.js
 https://coryrylan.com/blog/css-encapsulation-with-angular-components
+
+bootstrap UI - theming
+https://www.codeply.com/go/KrUO8QpyXP/bootstrap-4-dashboard
