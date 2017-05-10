@@ -1,7 +1,7 @@
 const path = require('path');
 var { NoEmitOnErrorsPlugin, LoaderOptionsPlugin, ProvidePlugin, ContextReplacementPlugin } = require('webpack');
 const ProgressPlugin = require('webpack/lib/ProgressPlugin');
-const { CommonsChunkPlugin } = require('webpack').optimize;
+const { CommonsChunkPlugin, UglifyJsPlugin, DedupePlugin } = require('webpack').optimize;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const autoprefixer = require('autoprefixer');

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 
-import {SharedModule} from "../shared";
+import {SharedModule} from "../shared/shared.module";
 import {TopBarComponent} from "./components/topbar/topbar.component";
 
 @NgModule({

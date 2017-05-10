@@ -95,6 +95,13 @@
     "webpack-merge": "^2.4.0",
     "yaml-js": "0.1.4",
     "yargs": "6.4.0",
-    "zone.js": "^0.7.4"
+    "zone.js": "^0.7.4",
+    "@ngrx/core": "^1.0.0",
+    "@ngrx/db": "^2.0.0",
+    "@ngrx/effects": "^2.0.0",
+    "@ngrx/router-store": "^1.2.0",
+    "@ngrx/store": "^2.2.0",
+    "@ngrx/store-devtools": "^3.2.0",
+    "ngrx-store-freeze": "^0.1.6"
   }
 }
