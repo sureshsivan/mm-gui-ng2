@@ -8,11 +8,6 @@ import {Headermodule}   from "../header/header.module";
 import {FooterModule}   from "../footer/footer.module";
 
 
-import { StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
-import { DBModule } from '@ngrx/db';
-import { RouterStoreModule } from '@ngrx/router-store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import {BrowserModule} from "@angular/platform-browser";
 
 

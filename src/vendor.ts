@@ -10,7 +10,7 @@ import 'rxjs';
 // Other vendors for example jQuery, Lodash or Bootstrap
 // You can import js, ts, css, sass, ...
 
-import 'jquery/dist/jquery.js';
+// import 'jquery/dist/jquery.js';
 // import 'bootstrap/scss/bootstrap.scss'
 
 // import 'semantic-ui-css/semantic.css';

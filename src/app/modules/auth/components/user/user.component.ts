@@ -2,8 +2,7 @@ import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import {User} from "../../types/User.type";
 
-// import Auth0Lock from 'auth0-lock';
-// const Auth0Lock = require('auth0-lock');
+// import {AuthService} from "../../services/UserAuth.service";
 
 @Component({
   selector: 'app-user-auth',
@@ -12,15 +11,21 @@ import {User} from "../../types/User.type";
 })
 export class UserComponent implements OnInit{
 
-  private isAuthdUser: boolean = false;
-
-  private authdUser: User = null;
+  private user: User = null;
 
   private userFullName:string = "Suresh Sivanantham";
   private lastLoggedIn:number = new Date().getTime() - (1000 * 60 * 60 * 24);
 
+  // constructor(private auth: AuthService){
+  //
+  // }
+
   ngOnInit(): void {
+
   }
 
-  // lock: Auth0LockStatic = new Auth0Lock("", "");
+  showAuth(){
+
+  }
+
 }
