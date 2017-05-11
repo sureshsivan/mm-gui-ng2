@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "es5",
     "module": "es2015",
     "moduleResolution": "node",
     "lib": [
@@ -10,10 +10,7 @@
     "emitDecoratorMetadata": true,
     "sourceMap": true,
     "noEmit": true,
-    "inlineSources": true,
-    "typeRoots": [
-      "../node_modules/@types"
-    ]
+    "inlineSources": true
   },
   "include": [
     "src/**/*.ts"

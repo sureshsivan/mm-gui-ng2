@@ -2,7 +2,6 @@ import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import {User} from "../../types/User.type";
 
-// import {AuthService} from "../../services/UserAuth.service";
 
 @Component({
   selector: 'app-user-auth',

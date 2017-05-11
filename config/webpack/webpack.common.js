@@ -7,6 +7,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 // const vendorCssExtractPlugin = new ExtractTextPlugin('vendor_custom.[hash].css');
 // const appCssExtractPlugin = new ExtractTextPlugin('app.[hash].css');
+const AotPlugin = require('@ngtools/webpack').AotPlugin;
 
 const helpers = require('./../helpers');
 const nodeModules = path.join(process.cwd(), 'node_modules');
@@ -33,6 +34,8 @@ module.exports = {
 
   module: {
     rules: [{
+        // test: /\.ts$/,
+        // loader: '@ngtools/webpack',
         test: /\.ts$/,
         use: [{
           loader: 'awesome-typescript-loader',
@@ -40,16 +43,19 @@ module.exports = {
         }, 'angular2-template-loader'],
         exclude: [/\.(spec|e2e)\.ts$/]
       }, {
+      //   "enforce": "pre",
+      //   "test": /\.js$/,
+      //   "loader": "source-map-loader",
+      //   "exclude": [
+      //     /\/node_modules\//
+      //   ]
+      // }, {
         test: /\.html$/,
         use: ['html-loader']
       }, {
         test: /\.scss$|\.sass$/,    //  all application sass files
         use: ['raw-loader', 'sass-loader'],
         include: [helpers.root('src', 'app', 'app.component.scss'), helpers.root('src', 'app', 'modules')]
-      // }, {
-      //   test: /\.scss$|\.sass$/,    // all vendor sass files and theme level overrides
-      //   use: ExtractTextPlugin.extract({fallback: 'style-loader', use: ['css-loader', 'sass-loader']}),
-      //   include: [helpers.root('src', 'themes')]
       }, {
         test: /\.scss$|\.sass$/,    //  all NON application sass files
         use: ['raw-loader', 'sass-loader'],
@@ -68,12 +74,16 @@ module.exports = {
   },
 
   plugins: [
-    new ContextReplacementPlugin(
-      // The (\\|\/) piece accounts for path separators in *nix and Windows
-      /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
-      helpers.root('./src'), // location of your src
-      {} // a map of your routes
-    ),
+    // new ContextReplacementPlugin(
+    //   // The (\\|\/) piece accounts for path separators in *nix and Windows
+    //   /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
+    //   helpers.root('./src'), // location of your src
+    //   {} // a map of your routes
+    // ),
+    // new AotPlugin({
+    //   tsConfigPath: 'src/tsconfig.ngt.json',
+    //   entryModule: 'src/app/app.module.ts'
+    // }),
     new CommonsChunkPlugin({
       name: "inline",
       minChunks: null

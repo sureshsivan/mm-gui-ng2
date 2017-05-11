@@ -8,6 +8,7 @@ import { AppComponent }   from './app.component';
 import {CoreModule}       from "./modules/core/core.module";
 import {BannerModule}     from "./modules/banner/banner.module";
 import {RouterModule} from "@angular/router";
+import {AuthService} from "./modules/auth/services/UserAuth.service";
 // import {BannerModule}     from "./modules/banner/banner.module";
 
 @NgModule({
@@ -20,6 +21,7 @@ import {RouterModule} from "@angular/router";
     CoreModule,
     BannerModule
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  providers: [AuthService]
 })
 export class AppModule { }
