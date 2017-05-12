@@ -7,6 +7,7 @@ import {AuthModule} from '../auth/auth.module';
 import {HeaderBarComponent} from '../header/components/header-bar/header-bar.component';
 import {UserProfileIndComponent} from '../header/components/user-profile-ind/user-profile-ind.component';
 import {FooterComponent} from '../footer/components/footer/footer.component';
+import {AuthService} from '../auth/services/Auth.service';
 
 @NgModule({
   imports: [
@@ -21,7 +22,10 @@ import {FooterComponent} from '../footer/components/footer/footer.component';
     HeaderModule,
     FooterModule
   ],
-  declarations: []
+  declarations: [],
+  providers: [
+    AuthService
+  ]
 })
 export class CoreModule {
   constructor (@Optional() @SkipSelf() parentModule: CoreModule) {
