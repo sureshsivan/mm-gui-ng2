@@ -3,12 +3,19 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "_checkdeployenv": "node techops/scripts/nodejs/validate-deploy-env.js",
+    "_applyperm": "chmod a+x -R ./techops/scripts/awscli/*.sh",
+    "_prepcfstack": "node techops/scripts/nodejs/yaml-merger-cf-template",
+    "_uploadartifacts": "./techops/scripts/awscli/upload_assets_to_s3.sh",
+    "_createorupdatestack": "./techops/scripts/awscli/create_or_update_stack.sh",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "prepdeploy": "npm run _checkdeployenv && npm run _applyperm && rimraf .build && npm run _prepcfstack",
+    "deploy": "npm run _createorupdatestack && npm run _uploadartifacts"
   },
   "private": true,
   "dependencies": {
