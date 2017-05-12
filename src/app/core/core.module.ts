@@ -4,9 +4,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {HeaderModule} from '../header/header.module';
 import {FooterModule} from '../footer/footer.module';
 import {AuthModule} from '../auth/auth.module';
-import {HeaderBarComponent} from '../header/components/header-bar/header-bar.component';
-import {UserProfileIndComponent} from '../header/components/user-profile-ind/user-profile-ind.component';
-import {FooterComponent} from '../footer/components/footer/footer.component';
 import {AuthService} from '../auth/services/Auth.service';
 
 @NgModule({

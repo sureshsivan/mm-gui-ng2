@@ -2,3 +2,7 @@
 @import '_variables';
 @import '../../node_modules/bootstrap/scss/bootstrap';
 @import '../../node_modules/font-awesome/css/font-awesome.css';
+
+.nounderline{
+  text-decoration: none !important;
+}

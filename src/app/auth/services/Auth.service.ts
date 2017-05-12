@@ -9,7 +9,7 @@ export class AuthService {
 
   private lock;
 
-  constructor(/*public router: Router*/) {
+  constructor(public router: Router) {
     this.lock = new Auth0Lock(AUTH_CONFIG.clientID, AUTH_CONFIG.domain, {
       oidcConformant: true,
       autoclose: true,
@@ -34,37 +34,37 @@ export class AuthService {
     this.lock.on('authenticated', (authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult);
-        // this.router.navigate(['/']);
+        this.router.navigate(['/']);
       }
     });
     this.lock.on('authorization_error', (err) => {
-      // this.router.navigate(['/']);
+      this.router.navigate(['/']);
       console.log(err);
       alert(`Error: ${err.error}. Check the console for further details.`);
     });
   }
 
-  // // Call this method in app.component
-  // // if using hash-based routing
-  // public handleAuthenticationWithHash(): void {
-  //   this
-  //     .router
-  //     .events
-  //     .filter(event => event instanceof NavigationStart)
-  //     .filter((event: NavigationStart) => (/access_token|id_token|error/).test(event.url))
-  //     .subscribe(() => {
-  //       this.lock.resumeAuth(window.location.hash, (err, authResult) => {
-  //         if (err) {
-  //           this.router.navigate(['/']);
-  //           console.log(err);
-  //           alert(`Error: ${err.error}. Check the console for further details.`);
-  //           return;
-  //         }
-  //         this.setSession(authResult);
-  //         this.router.navigate(['/']);
-  //       });
-  //     });
-  // }
+  // Call this method in app.component
+  // if using hash-based routing
+  public handleAuthenticationWithHash(): void {
+    this
+      .router
+      .events
+      .filter(event => event instanceof NavigationStart)
+      .filter((event: NavigationStart) => (/access_token|id_token|error/).test(event.url))
+      .subscribe(() => {
+        this.lock.resumeAuth(window.location.hash, (err, authResult) => {
+          if (err) {
+            this.router.navigate(['/']);
+            console.log(err);
+            alert(`Error: ${err.error}. Check the console for further details.`);
+            return;
+          }
+          this.setSession(authResult);
+          this.router.navigate(['/']);
+        });
+      });
+  }
 
   private setSession(authResult): void {
     // Set the time that the access token will expire at
@@ -80,7 +80,7 @@ export class AuthService {
     localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
     // Go back to the home route
-    // this.router.navigate(['/']);
+    this.router.navigate(['/']);
   }
 
   public isAuthenticated(): boolean {

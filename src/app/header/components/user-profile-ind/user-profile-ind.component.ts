@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {User} from '../../../shared/types/User.type';
+import {AuthService} from '../../../auth/services/Auth.service';
 
 @Component({
   selector: 'mm-user-profile-ind',
@@ -7,12 +8,12 @@ import {User} from '../../../shared/types/User.type';
   styleUrls: ['./user-profile-ind.component.scss']
 })
 export class UserProfileIndComponent implements OnInit {
-  private user: User = new User();
+  private user: User = null;
 
   private userFullName = 'Suresh Sivanantham';
   private lastLoggedIn = new Date().getTime() - (1000 * 60 * 60 * 24);
 
-  constructor() { }
+  constructor(private auth: AuthService) { }
 
   ngOnInit() {
   }

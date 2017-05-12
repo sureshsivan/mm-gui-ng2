@@ -1,16 +1,11 @@
-<!--<p>-->
-  <!--user-profile-ind works!-->
-<!--</p>-->
-<div class="nav-link" *ngIf="user === null">
-  <a class="text-warning nounderline" href="#" (click)="showAuth()">
+<div class="nav-link" *ngIf="!auth.isAuthenticated()">
+  <a class="text-warning nounderline" href="#" (click)="auth.login()">
     Login
     <span class="fa fa-user-secret mx-2"></span>
   </a>
-  <!--<span class="fa fa-user-secret"></span>-->
-  <!--<p class="text-warning">Login</p>-->
 </div>
 
-<div class="btn-group" *ngIf="user !== null">
+<div class="btn-group" *ngIf="auth.isAuthenticated()">
   <a class="dropdown-toggle .dropdown-toggle-split" href="#"
      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     <img src="http://lorempixel.com/30/30/" class="rounded-circle dropdown-toggle"/>
