@@ -1,0 +1,62 @@
+<!--<p>-->
+  <!--user-profile-ind works!-->
+<!--</p>-->
+<div class="nav-link" *ngIf="user === null">
+  <a class="text-warning nounderline" href="#" (click)="showAuth()">
+    Login
+    <span class="fa fa-user-secret mx-2"></span>
+  </a>
+  <!--<span class="fa fa-user-secret"></span>-->
+  <!--<p class="text-warning">Login</p>-->
+</div>
+
+<div class="btn-group" *ngIf="user !== null">
+  <a class="dropdown-toggle .dropdown-toggle-split" href="#"
+     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <img src="http://lorempixel.com/30/30/" class="rounded-circle dropdown-toggle"/>
+  </a>
+  <div class="dropdown-menu dropdown-menu-right no-pad" style="width: 300px;">
+    <h6 class="dropdown-header font-weight-bold mb-2">User Control panel</h6>
+    <div class="card card-default border-0">
+      <div class="container-fluid">
+        <div class="row bg-info py-5">
+          <div class="col-3 mx-auto">
+            <img src="http://lorempixel.com/150/150/" class="rounded-circle img-fluid"/>
+          </div>
+          <div class="col-12 text-center">
+            <h4>{{ userFullName }}</h4>
+          </div>
+        </div>
+        <div class="row mb-2 justify-content-center">
+          <div class="col-12 py-3 text-center">
+            <p>Last Login : {{lastLoggedIn | date:"MM/dd/yy" }}</p>
+          </div>
+        </div>
+        <div class="row mb-2 justify-content-center">
+          <div class="col-2 text-center">
+            <i class="fa fa-star"></i>
+            <br> Saves
+            <h4>17</h4>
+          </div>
+          <div class="col-2 text-center">
+            <i class="fa fa-heart"></i>
+            <br> Likes
+            <h4>9</h4>
+          </div>
+          <div class="col-2 text-center">
+            <i class="fa fa-file-o"></i>
+            <br> Posts
+            <h4>45</h4>
+          </div>
+          <div class="col-2 text-center">
+            <i class="fa fa-users"></i>
+            <br> Friends
+            <h4>36</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dropdown-divider"></div>
+    <a href="#" class="menu-item"><h6 class="dropdown-header" style="color: red">Logout</h6></a>
+  </div>
+</div>
