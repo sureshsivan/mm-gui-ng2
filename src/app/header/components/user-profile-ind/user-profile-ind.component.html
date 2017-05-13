@@ -5,10 +5,13 @@
   </a>
 </div>
 
-<div class="btn-group" *ngIf="auth.isAuthenticated()">
+<div class="nav-link" *ngIf="auth.isAuthenticated()">
   <a class="dropdown-toggle .dropdown-toggle-split" href="#"
      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    <img src="http://lorempixel.com/30/30/" class="rounded-circle dropdown-toggle"/>
+    <a class="navbar-item" href="#"><img height="25" width="25" alt="{{ auth.getProfile()?.nickname}}" src="{{ auth.getProfile()?.picture}}" class="rounded-circle img-fluid img-responsive" /></a>
+    <!--<img src="{{ auth.getProfile()?.picture}}" class="rounded-circle img-fluid img-responsive"/>-->
+    <!--<h6>{{ auth.getProfile()?.nickname}}</h6>-->
+
   </a>
   <div class="dropdown-menu dropdown-menu-right no-pad" style="width: 300px;">
     <h6 class="dropdown-header font-weight-bold mb-2">User Control panel</h6>
