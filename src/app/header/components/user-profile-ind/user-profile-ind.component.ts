@@ -8,14 +8,13 @@ import {AuthService} from '../../../auth/services/Auth.service';
   styleUrls: ['./user-profile-ind.component.scss']
 })
 export class UserProfileIndComponent implements OnInit {
-  private user: User = null;
 
   private userFullName = 'Suresh Sivanantham';
   private lastLoggedIn = new Date().getTime() - (1000 * 60 * 60 * 24);
 
-  constructor(private auth: AuthService) { }
+  constructor(private auth: AuthService) {
+  }
 
   ngOnInit() {
   }
-
 }

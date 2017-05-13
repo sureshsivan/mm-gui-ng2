@@ -7,5 +7,6 @@ export const environment = {
   local: true,
   dev: false,
   production: false,
-  key: 'local'
+  key: 'local',
+  host: 'localhost:4200'
 };

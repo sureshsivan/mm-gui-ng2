@@ -24,6 +24,26 @@ export class AuthService {
     });
   }
 
+
+  private loadProfile(): void {
+    const accessToken = localStorage.getItem('access_token');
+    if (!accessToken) {
+      throw new Error('Access token must exist to fetch profile');
+    }
+    this.lock.getUserInfo(accessToken, (err, profile) => {
+      console.log(profile);
+      if (profile) {
+        localStorage.setItem('user_profile', JSON.stringify(profile));
+      }
+      const routeTo = JSON.parse(localStorage.getItem('current_route_snapshot')) || ['/home'];
+      this.router.navigate(routeTo);
+    });
+  }
+
+  public getProfile(): any{
+    return JSON.parse(localStorage.getItem('user_profile'));
+  }
+
   public login(): void {
     this.lock.show();
   }
@@ -34,11 +54,11 @@ export class AuthService {
     this.lock.on('authenticated', (authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult);
-        this.router.navigate(['/']);
+        this.loadProfile();
       }
     });
     this.lock.on('authorization_error', (err) => {
-      this.router.navigate(['/']);
+      this.router.navigate(['/error']);
       console.log(err);
       alert(`Error: ${err.error}. Check the console for further details.`);
     });
@@ -79,6 +99,9 @@ export class AuthService {
     localStorage.removeItem('access_token');
     localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
+    localStorage.removeItem('user_profile');
+    localStorage.removeItem('current_route_snapshot');
+    localStorage.removeItem('current_app_state');
     // Go back to the home route
     this.router.navigate(['/']);
   }

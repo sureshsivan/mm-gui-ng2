@@ -16,15 +16,15 @@
       <div class="container-fluid">
         <div class="row bg-info py-5">
           <div class="col-3 mx-auto">
-            <img src="http://lorempixel.com/150/150/" class="rounded-circle img-fluid"/>
+            <img src="{{ auth.getProfile()?.picture}}" class="rounded-circle img-fluid"/>
           </div>
           <div class="col-12 text-center">
-            <h4>{{ userFullName }}</h4>
+            <h4>{{ auth.getProfile()?.name}}</h4>
           </div>
         </div>
         <div class="row mb-2 justify-content-center">
           <div class="col-12 py-3 text-center">
-            <p>Last Login : {{lastLoggedIn | date:"MM/dd/yy" }}</p>
+            <p>Last Login : {{ auth.getProfile()?.updated_at | date:"MM/dd/yy" }}</p>
           </div>
         </div>
         <div class="row mb-2 justify-content-center">
@@ -52,6 +52,6 @@
       </div>
     </div>
     <div class="dropdown-divider"></div>
-    <a href="#" class="menu-item"><h6 class="dropdown-header" style="color: red">Logout</h6></a>
+    <a href="#" class="menu-item"><h6 class="dropdown-header" (click)="auth.logout()">Logout</h6></a>
   </div>
 </div>

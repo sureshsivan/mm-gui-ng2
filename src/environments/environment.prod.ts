@@ -2,5 +2,6 @@ export const environment = {
   local: false,
   dev: false,
   production: true,
-  key: 'prod'
+  key: 'prod',
+  host: 'mmng.sivashub.com'
 };

@@ -29,7 +29,7 @@ env: |
 
 script:
   - npm rebuild node-sass # this is needed to solve node-sass issues on node-sass module cache - instructing to rebuild node-sass every time.
-  - yarn build
+  - yarn build-dev
 
 before_deploy:
    pip install --user awscli

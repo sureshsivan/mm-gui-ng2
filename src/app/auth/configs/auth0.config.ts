@@ -1,3 +1,4 @@
+import {environment} from '../../../environments/environment';
 interface AuthConfig {
   clientID: string;
   domain: string;
@@ -7,5 +8,5 @@ interface AuthConfig {
 export const AUTH_CONFIG: AuthConfig = {
   clientID: 'QCDLRCdNauzVKDoxXuz2lELUZNu34tBG',
   domain: 'sivas.auth0.com',
-  callbackURL: 'http://localhost:4200/callback'
+  callbackURL: 'http://' + environment.host + '/callback'
 };
