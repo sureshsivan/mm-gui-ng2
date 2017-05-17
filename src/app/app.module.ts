@@ -22,7 +22,7 @@ import {RouterModule} from '@angular/router';
     BannerModule,
     HomeModule,
     UserCpModule,
-    RouterModule.forRoot(ROOT_ROUTES)
+    RouterModule.forRoot(ROOT_ROUTES, { useHash: true })
   ],
   providers: [],
   bootstrap: [AppComponent]

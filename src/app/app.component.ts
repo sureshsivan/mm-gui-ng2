@@ -10,7 +10,8 @@ export class AppComponent {
   title = 'app works!';
 
   constructor(public auth: AuthService) {
-    auth.handleAuthentication();
+    // auth.handleAuthentication();
+    auth.handleAuthenticationWithHash();
   }
 
 }

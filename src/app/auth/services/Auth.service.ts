@@ -31,7 +31,6 @@ export class AuthService {
       throw new Error('Access token must exist to fetch profile');
     }
     this.lock.getUserInfo(accessToken, (err, profile) => {
-      console.log(profile);
       if (profile) {
         localStorage.setItem('user_profile', JSON.stringify(profile));
       }
@@ -81,7 +80,7 @@ export class AuthService {
             return;
           }
           this.setSession(authResult);
-          this.router.navigate(['/']);
+          this.loadProfile();
         });
       });
   }

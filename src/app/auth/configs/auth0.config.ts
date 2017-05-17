@@ -8,5 +8,5 @@ interface AuthConfig {
 export const AUTH_CONFIG: AuthConfig = {
   clientID: 'QCDLRCdNauzVKDoxXuz2lELUZNu34tBG',
   domain: 'sivas.auth0.com',
-  callbackURL: 'http://' + environment.host + '/callback'
+  callbackURL: 'http://' + environment.host + '/#/callback'
 };
