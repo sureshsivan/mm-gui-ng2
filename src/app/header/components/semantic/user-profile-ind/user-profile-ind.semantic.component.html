@@ -1,0 +1,105 @@
+<div *ngIf="!auth.isAuthenticated()" (click)="auth.login()" style="cursor: pointer;">
+  <a class="user-legend">
+    <i class="user circle outline icon"></i>
+    Login
+  </a>
+</div>
+
+<div *ngIf="auth.isAuthenticated()">
+  <span class="user-legend">
+    <img class="ui avatar image" src="{{ auth.getProfile()?.picture}}">
+    <span>{{ auth.getProfile()?.name }}</span>
+    <i class="dropdown icon"></i>
+  </span>
+
+  <div class="ui popup bottom left transition hidden user-cp-exp">
+    <div class="ui cards">
+      <div class="card" style="width: 30rem">
+        <div class="content">
+          <img class="right floated tiny ui image" src="{{ auth.getProfile()?.picture}}">
+          <div class="header">
+            {{ auth.getProfile()?.name }}
+          </div>
+          <div class="meta">
+            ({{ auth.getProfile()?.nickname }} )
+          </div>
+        </div>
+        <div class="extra content  align center">
+          <div class="description text red">
+            <div class="ui tiny header">Notifications</div>
+            <div class="floating ui red label">22</div>
+            <br/><br/><br/><br/><br/>
+
+          </div>
+          <div class="ui icon four buttons align middle center centered">
+            <button class="ui button"><i class="step backward step icon"></i></button>
+            <button class="ui button"><i class="step forward icon"></i></button>
+            <button class="ui button"><i class="play icon"></i></button>
+            <button class="ui button"><i class="check circle icon green"></i></button>
+          </div>
+
+        </div>
+        <div class="extra content">
+          <div class="ui two buttons">
+            <div class="ui basic green button">User Settings</div>
+            <div class="ui basic red button" (click)="auth.logout()">Logout</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!--<a class="dropdown-toggle .dropdown-toggle-split" href="#"-->
+     <!--data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+    <!--<a class="navbar-item" href="#"><img height="25" width="25" alt="{{ auth.getProfile()?.nickname}}" src="{{ auth.getProfile()?.picture}}" class="rounded-circle img-fluid img-responsive" /></a>-->
+    <!--&lt;!&ndash;<img src="{{ auth.getProfile()?.picture}}" class="rounded-circle img-fluid img-responsive"/>&ndash;&gt;-->
+    <!--&lt;!&ndash;<h6>{{ auth.getProfile()?.nickname}}</h6>&ndash;&gt;-->
+
+  <!--</a>-->
+  <!--<div class="dropdown-menu dropdown-menu-right no-pad" style="width: 300px;">-->
+    <!--<h6 class="dropdown-header font-weight-bold mb-2">User Control panel</h6>-->
+    <!--<div class="card card-default border-0">-->
+      <!--<div class="container-fluid">-->
+        <!--<div class="row bg-info py-5">-->
+          <!--<div class="col-3 mx-auto">-->
+            <!--<img src="{{ auth.getProfile()?.picture}}" class="rounded-circle img-fluid"/>-->
+          <!--</div>-->
+          <!--<div class="col-12 text-center">-->
+            <!--<h4>{{ auth.getProfile()?.name}}</h4>-->
+          <!--</div>-->
+        <!--</div>-->
+        <!--<div class="row mb-2 justify-content-center">-->
+          <!--<div class="col-12 py-3 text-center">-->
+            <!--<p>Last Login : {{ auth.getProfile()?.updated_at | date:"MM/dd/yy" }}</p>-->
+          <!--</div>-->
+        <!--</div>-->
+        <!--<div class="row mb-2 justify-content-center">-->
+          <!--<div class="col-2 text-center">-->
+            <!--<i class="fa fa-star"></i>-->
+            <!--<br> Saves-->
+            <!--<h4>17</h4>-->
+          <!--</div>-->
+          <!--<div class="col-2 text-center">-->
+            <!--<i class="fa fa-heart"></i>-->
+            <!--<br> Likes-->
+            <!--<h4>9</h4>-->
+          <!--</div>-->
+          <!--<div class="col-2 text-center">-->
+            <!--<i class="fa fa-file-o"></i>-->
+            <!--<br> Posts-->
+            <!--<h4>45</h4>-->
+          <!--</div>-->
+          <!--<div class="col-2 text-center">-->
+            <!--<i class="fa fa-users"></i>-->
+            <!--<br> Friends-->
+            <!--<h4>36</h4>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+    <!--<div class="dropdown-divider"></div>-->
+    <!--<a href="#" class="menu-item"><h6 class="dropdown-header" (click)="auth.logout()">Logout</h6></a>-->
+  <!--</div>-->
+</div>

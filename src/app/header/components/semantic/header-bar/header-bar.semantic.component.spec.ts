@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HeaderBarComponent } from './header-bar.component';
+import { HeaderBarSemanticComponent } from './header-bar.semantic.component';
 
 describe('HeaderBarComponent', () => {
-  let component: HeaderBarComponent;
-  let fixture: ComponentFixture<HeaderBarComponent>;
+  let component: HeaderBarSemanticComponent;
+  let fixture: ComponentFixture<HeaderBarSemanticComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ HeaderBarComponent ]
+      declarations: [ HeaderBarSemanticComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HeaderBarComponent);
+    fixture = TestBed.createComponent(HeaderBarSemanticComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

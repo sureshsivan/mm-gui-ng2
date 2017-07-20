@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UserProfileIndComponent } from './user-profile-ind.component';
+import { UserProfileIndSemanticComponent } from './user-profile-ind.semantic.component';
 
 describe('UserProfileIndComponent', () => {
-  let component: UserProfileIndComponent;
-  let fixture: ComponentFixture<UserProfileIndComponent>;
+  let component: UserProfileIndSemanticComponent;
+  let fixture: ComponentFixture<UserProfileIndSemanticComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UserProfileIndComponent ]
+      declarations: [ UserProfileIndSemanticComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UserProfileIndComponent);
+    fixture = TestBed.createComponent(UserProfileIndSemanticComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

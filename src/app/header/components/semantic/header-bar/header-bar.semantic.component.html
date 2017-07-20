@@ -1,0 +1,31 @@
+<div class="ui inverted pointing top fixed menu">
+  <div class="header item">
+    <img src="http://lorempixel.com/30/30/" style="width: initial;"/>
+    <span class="title" style="cursor: pointer;margin-left: 1rem;">My REACT App</span>
+  </div>
+  <div class="menu">
+    <a class="active item">
+      <i aria-hidden="true" class="home icon"></i>
+      Guest 1
+    </a>
+  </div>
+  <div class="right menu">
+    <div class="item">
+      <div class="ui icon input search-field"><input type="text" placeholder="Search...">
+        <i aria-hidden="true" class="search icon"></i>
+      </div>
+    </div>
+    <div class="item">
+      <mm-sem-user-profile-ind></mm-sem-user-profile-ind>
+    </div>
+    <a class="fitted item" style="margin-right: 1rem;" *ngIf="auth.isAuthenticated()" (click)="auth.logout()">
+      <i class="ui orange large label">
+        <i class="external icon"></i>
+        <span>Logout</span>
+      </i>
+    </a>
+  </div>
+</div>
+
+
+
