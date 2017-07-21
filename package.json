@@ -38,6 +38,7 @@
     "rxjs": "^5.1.0",
     "semantic-ui-css": "^2.2.11",
     "semantic-ui-less": "^2.2.11",
+    "time-ago-pipe": "^1.2.1",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {

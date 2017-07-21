@@ -5,6 +5,7 @@ import {HeaderModule} from '../header/header.module';
 import {FooterModule} from '../footer/footer.module';
 import {AuthModule} from '../auth/auth.module';
 import {AuthService} from '../auth/services/Auth.service';
+import {TimeAgoPipe} from "time-ago-pipe";
 
 @NgModule({
   imports: [
@@ -19,7 +20,9 @@ import {AuthService} from '../auth/services/Auth.service';
     HeaderModule,
     FooterModule
   ],
-  declarations: [],
+  declarations: [
+
+  ],
   providers: [
     AuthService
   ]

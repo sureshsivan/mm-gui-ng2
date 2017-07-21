@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, OnInit} from '@angular/core';
+import {AfterViewChecked, AfterViewInit, Component, ElementRef, OnInit} from '@angular/core';
 import {User} from '../../../../shared/types/User.type';
 import {AuthService} from '../../../../auth/services/Auth.service';
 declare var $;
@@ -7,21 +7,28 @@ declare var $;
   templateUrl: './user-profile-ind.semantic.component.html',
   styleUrls: ['./user-profile-ind.semantic.component.scss']
 })
-export class UserProfileIndSemanticComponent implements OnInit, AfterViewInit {
+export class UserProfileIndSemanticComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
-  private userFullName = 'Suresh Sivanantham';
-  private lastLoggedIn = new Date().getTime() - (1000 * 60 * 60 * 24);
+  private notifications: Array<{}>;
 
-  constructor(private auth: AuthService, private elRef: ElementRef) {
+  constructor(private auth: AuthService,
+              private elRef: ElementRef) {
   }
 
   ngOnInit() {
   }
 
   ngAfterViewInit(): void {
-    $(this.elRef.nativeElement.querySelector('.user-legend')).popup({
+    var el = $(this.elRef.nativeElement.querySelector('.user-legend'));
+    var handler = el.popup({
       inline     : true,
       on  : 'click'
     });
+    console.log("ngAfterViewInit", el, handler);
   }
+
+  ngAfterViewChecked(): void {
+    console.log("View Checked....");
+  }
+
 }
