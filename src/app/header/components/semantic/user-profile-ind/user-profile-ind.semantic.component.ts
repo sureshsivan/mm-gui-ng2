@@ -10,6 +10,7 @@ declare var $;
 export class UserProfileIndSemanticComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   private notifications: Array<{}>;
+  private isEventLinked: boolean = false;
 
   constructor(private auth: AuthService,
               private elRef: ElementRef) {
@@ -19,16 +20,17 @@ export class UserProfileIndSemanticComponent implements OnInit, AfterViewInit, A
   }
 
   ngAfterViewInit(): void {
-    var el = $(this.elRef.nativeElement.querySelector('.user-legend'));
-    var handler = el.popup({
-      inline     : true,
-      on  : 'click'
-    });
-    console.log("ngAfterViewInit", el, handler);
   }
 
   ngAfterViewChecked(): void {
-    console.log("View Checked....");
+    var userLegendEl = this.elRef.nativeElement.querySelector('.user-legend');
+    if(userLegendEl && !this.isEventLinked){
+      $(userLegendEl).popup({
+        inline     : true,
+        on  : 'click'
+      });
+      this.isEventLinked = true;
+    }
   }
 
 }
