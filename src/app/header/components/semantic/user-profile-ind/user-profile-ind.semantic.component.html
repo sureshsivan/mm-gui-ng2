@@ -28,16 +28,18 @@
             Last Login : {{ auth.getProfile()?.updated_at | date }}
           </div>
         </div>
-        <div class="extra content align left">
+        <div class="extra content align left" *ngIf="notifications?.length > 0">
           <span class="">
             <i class="icon announcement red"></i>
             Notifications
           </span>
           <div class="ui message">
-            <div class="header">
-              Changes in Service
+            <div class="">
+              {{ notifications[currentNotificationIndex].subject }}
             </div>
-            <p>We just updated our privacy policy here to better service our customers. We recommend reviewing the changes.</p>
+            <p>
+              {{ notifications[currentNotificationIndex].message }}
+            </p>
           </div>
           <div class="ui icon three buttons align middle center centered" style="margin-top: 1rem;">
             <button class="ui button"><i class="step backward step icon"></i></button>

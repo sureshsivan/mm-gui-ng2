@@ -1,6 +1,7 @@
 import {AfterViewChecked, AfterViewInit, Component, ElementRef, OnInit} from '@angular/core';
 import {User} from '../../../../shared/types/User.type';
 import {AuthService} from '../../../../auth/services/Auth.service';
+import {Notification} from "../../../../shared/types/Notification.type";
 declare var $;
 @Component({
   selector: 'mm-sem-user-profile-ind',
@@ -9,7 +10,8 @@ declare var $;
 })
 export class UserProfileIndSemanticComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
-  private notifications: Array<{}>;
+  private notifications: Array<Notification>;
+  private currentNotificationIndex: number = 0;
   private isEventLinked: boolean = false;
 
   constructor(private auth: AuthService,
@@ -17,6 +19,10 @@ export class UserProfileIndSemanticComponent implements OnInit, AfterViewInit, A
   }
 
   ngOnInit() {
+    this.notifications = [];
+    this.notifications.push(new Notification("Test Subject 1", "short message 1", false, 0, 0));
+    this.notifications.push(new Notification("Test Subject 2", "short message 2", false, 0, 0));
+    this.notifications.push(new Notification("Test Subject 3", "long message 1long message 1long message 1long message 1long message 1long message 1long message 1long message 1long message 1long message 1long message 1long message 1long message 1long message 1long message 1long message 1long message 1long message 1long message 1long message 1long message 1long message 1long message 1long message 1long message 1long message 1long message 1long message 1long message 1long message 1long message 1long message 1long message 1long message 1", false, 0, 0));
   }
 
   ngAfterViewInit(): void {
